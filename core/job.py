@@ -2,6 +2,7 @@ import time
 
 
 class Job:
+    """Класс описывающий задачу планировщика и её методы."""
     def __init__(self,
                  task,
                  start_at=None,
@@ -43,6 +44,7 @@ class Job:
         self.__coroutine.send(time_now)
 
     def do_job(self, time_now):
+        """Корутина для запуска задач на исполнение."""
         current_time = time_now
         while True:
             if self.__ready_to_execute(current_time) == True:
