@@ -10,7 +10,7 @@ from core.job_repository import JobRepository
 class Scheduler:
     """Класс описывающий планировщик задач и его методы."""
 
-    def __init__(self, job_repository, pool_size=10):
+    def __init__(self, job_repository=None, pool_size=10):
         self.__pool_size = pool_size
         self.__queue = []
         self.__is_running = False
@@ -23,7 +23,7 @@ class Scheduler:
                  dependencies=[]
                  ):
         """Постановка задач в очередь. Сперва проверяются есть ли запущеные задачи,
-        если есть выполнение задач станавливается. В очередь можно добавить любое
+        если есть выполнение задач останавливается. В очередь можно добавить любое
         количество задач, но за один запуск планировщика будет обработано только
         то количество задач, которое соответствует pool_size планировщика. """
         was_running = self.__is_running
@@ -42,7 +42,7 @@ class Scheduler:
 
     @staticmethod
     def __process_queue(event, queue, pool_size):
-        """Метод  ."""
+        """Метод  для обработки очереди и запуска задач."""
         while True:
             job_count = 0
             for job in queue:
@@ -62,7 +62,7 @@ class Scheduler:
         """Метод запуска задач в потоке."""
         if self.__is_running:
             return
-        loaded_jobs = self.__job_repository.get_jobs()
+        loaded_jobs = self.__load_queue()
         self.__queue.extend(loaded_jobs)
         self.__event = Event()
         self.__thread = threading.Thread(
@@ -81,8 +81,15 @@ class Scheduler:
         self.stop()
         self.run()
 
+    def __load_queue(self):
+        if self.__job_repository == None:
+            return []
+        self.__job_repository.__load_queue()
+
     def __save_queue(self):
-        """Метод сохранения не выполненых задач."""
+        """Метод сохранения не выполненных задач."""
+        if self.__job_repository == None:
+            return
         self.__job_repository.save_jobs(self.__queue)
 
     def __save_and_clear_queue(self):
@@ -99,31 +106,3 @@ class Scheduler:
         self.__is_running = False
         if save == True:
             self.__save_and_clear_queue()
-
-    # jobs_list, dependencies = [], dict()
-    # for key, raw_task in load_json().items():
-    #     task = Task.parse_obj(raw_task)
-    #     jobs_list.append(
-    #         Job(
-    #             uid=key,
-    #             task=task.name,
-    #             start_at=task.start_at,
-    #             max_working_time=task.max_working_time,
-    #             tries=task.tries,
-    #             dependencies=[]
-    #         )
-    #     )
-    #     dependencies[key] = task.dependencies
-    # for job in jobs_list:
-    #     job.dependencies = [j for j in jobs_list
-    #                         if j.uid in dependencies[job.uid]]
-    # return jobs_list
-
-    # data = dict()
-    # for job in queue:
-    #     job_data = get_job_data(job)
-    #     for dependency in job.dependencies:
-    #         if dependency in queue:
-    #             job_data['dependencies'].append(dependency.uid)
-    #     data[job.uid] = job_data
-    # save_json(data)
