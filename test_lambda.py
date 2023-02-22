@@ -6,11 +6,13 @@
 # print(f())
 
 
-def call_lambda(a): print(a())
+# def call_lambda(a): print(a())
+#
+#
+# f = call_lambda(lambda: 'hello world')
+#
+#
 
+create_job = lambda test_job: 1
 
-f = call_lambda(lambda: 'hello world')
-
-
-
-
+print(create_job(1))

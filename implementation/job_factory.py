@@ -2,8 +2,8 @@ from core.task import Task
 
 
 class JobFactory:
-    def __init__(self):
-        self.__creators = {}
+    def __init__(self, creators={}):
+        self.__creators = creators
 
     def register_job(self, name_task, create_job):
         self.__creators[name_task] = create_job
@@ -13,5 +13,3 @@ class JobFactory:
         if not creator:
             raise ValueError(name_task)
         return creator
-
-

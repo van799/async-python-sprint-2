@@ -1,5 +1,6 @@
 from core.job_repository import JobRepository
 import json
+from core.job import Job
 
 
 class JobJsonRepository(JobRepository):
@@ -13,16 +14,14 @@ class JobJsonRepository(JobRepository):
         data = self.__reader_writer.read()
         json_jobs = json.load(data)
         for item in json_jobs:
-            task_name = item.task_name
-            job_creator = self.__job_factory.get_job_creator(task_name)
-            job = job_creator(item.start_at,
-                              item.max_working_time,
-                              item.tries,
-                              item.dependencies)
+            job = Job.get_job(item)
             jobs.append(job)
         return jobs
 
     def save_jobs(self, jobs):
-        json_jobs = json.dumps(jobs, indent=4)
+        job_descriptors = []
+        for job in jobs:
+            job_descriptors.append(job.get_job_descriptor())
+        json_jobs = json.dumps(job_descriptors, indent=4)
         self.__reader_writer.write(json_jobs)
         return

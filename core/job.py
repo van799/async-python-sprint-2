@@ -1,8 +1,10 @@
 import time
+from core.job_descriptor import JobDescriptor
 
 
 class Job:
     """Класс описывающий задачу планировщика и её методы."""
+
     def __init__(self,
                  task,
                  start_at=None,
@@ -66,3 +68,20 @@ class Job:
     def stop(self):
         self.__co_execute.close()
         self.__co_execute = None
+
+    def get_job_descriptor(self):
+        job_descriptor = JobDescriptor()
+        job_descriptor.task_name = self.task.name
+        job_descriptor.start_at = self.start_at
+        job_descriptor.max_working_time = self.max_working_time
+        job_descriptor.tries = self.tries
+        job_descriptor.dependencies = self.dependencies
+        return job_descriptor
+    @staticmethod
+    def get_job(job_descriptor, job_factory):
+        job_creator = job_factory.get_job_creator(job_descriptor.task_name)
+        return job_creator(start_at=job_descriptor.start_at,
+                           max_working_time=job_descriptor.max_working_time,
+                           tries=job_descriptor.tries,
+                           dependencies=job_descriptor.dependencies
+                           )
