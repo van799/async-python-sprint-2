@@ -6,7 +6,7 @@ class TestEmptyTask(Task):
         super().__init__(param)
 
     def name(self):
-        return 'empty_task'
+        return 'test_empty_task'
 
     def execute(self):
         print('hello world')

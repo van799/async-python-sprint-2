@@ -16,3 +16,10 @@
 create_job = lambda test_job: 1
 
 print(create_job(1))
+
+a = 'a'
+dict_test = {
+    'a' : 'ada'
+}
+
+dict_test.a

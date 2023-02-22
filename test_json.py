@@ -12,7 +12,7 @@ class Apple:
         self.a = 'ada'
 
     def to_json(self):
-        self.list()
+        # self.list()
         return json.dumps(self,
                           default=lambda o: o.__dict__,
                           sort_keys=True,

@@ -14,15 +14,13 @@ class TestJobJsonRepository(unittest.TestCase):
         self.job_factory = JobFactory()
 
         self.job_factory.register_job(
-            name_task='empty_task',
+            name_task='test_empty_task',
             create_job=lambda start_at, max_working_time, tries,
-                              dependencies: TestEmptyTask(
-                start_at,
-                max_working_time,
-                tries,
-                dependencies
-            )
-        )
+                              dependencies: Job(TestEmptyTask(''), start_at,
+                                                max_working_time,
+                                                tries,
+                                                dependencies
+                                                ))
 
     def test_get_jobs_return_saved_jobs(self):
         job_descriptor = Job(task=TestEmptyTask(), max_working_time=-1, tries=0).get_job_descriptor()
@@ -30,8 +28,13 @@ class TestJobJsonRepository(unittest.TestCase):
             job_descriptor
         ]
 
-        json_jobs = json.dumps(jobs, cls=JobDescriptorEncoder)
-        job_json_repository = JobJsonRepository(reader_writer=TestReadWrite(json_jobs), job_factory=self.job_factory)
+        json_jobs = json.dumps(jobs,
+                               default=lambda o: o.__dict__,
+                               sort_keys=True,
+                               indent=4
+                               )
+        job_json_repository = JobJsonRepository(reader_writer=TestReadWrite(json_jobs),
+                                                job_factory=self.job_factory)
         saved_jobs = job_json_repository.get_jobs()
-        job_empty_task = any(x.task_name == 'empty_task' for x in saved_jobs)
+        job_empty_task = any(x.task.name == 'test_empty_task' for x in saved_jobs)
         self.assertNotEqual(job_empty_task, None)

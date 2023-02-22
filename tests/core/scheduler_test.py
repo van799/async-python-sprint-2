@@ -19,7 +19,6 @@ class SchedulerTest(unittest.TestCase):
         job_repository = TestJobRepository(items=jobs)
         scheduler = Scheduler(job_repository)
         scheduler.run()
-        scheduler.queue
         self.assertEqual(len(scheduler.queue), len(jobs))
         scheduler.stop()
 
