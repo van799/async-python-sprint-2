@@ -10,11 +10,12 @@ from core.job_repository import JobRepository
 class Scheduler:
     """Класс описывающий планировщик задач и его методы."""
 
-    def __init__(self, job_repository=None, pool_size=10):
+    def __init__(self, queue_processor, job_repository=None, pool_size=10):
         self.__pool_size = pool_size
         self.__queue = []
         self.__is_running = False
         self.__job_repository = job_repository
+        self.__queue_processor = queue_processor
 
     def schedule(self, task,
                  start_at=None,
@@ -40,40 +41,14 @@ class Scheduler:
         if was_running == True:
             self.run()
 
-    @staticmethod
-    def __process_queue(event, queue, pool_size):
-        """Метод для обработки очереди и запуска задач."""
-        while True:
-            job_count = 0
-            for job in queue:
-                if job.is_complete:
-                    continue
-                job_count += 1
-                print("запускаем job")
-                if job_count < pool_size:
-                    job.run(datetime.now())
-                else:
-                    print('pool is full')
-            if event.is_set():
-                break
-            sleep(1)
-
     def run(self):
         """Метод запуска задач в потоке."""
-        if self.__is_running:
+        if self.__queue_processor.is_running:
             return
+
         loaded_jobs = self.__load_queue()
         self.__queue.extend(loaded_jobs)
-        self.__event = Event()
-        self.__thread = threading.Thread(
-            target=self.__process_queue,
-            args=(self.__event,
-                  self.__queue,
-                  self.__pool_size,
-                  )
-        )
-        self.__thread.start()
-        self.__is_running = True
+        self.__queue_processor.run(self.queue)
 
     @property
     def queue(self):
@@ -81,13 +56,13 @@ class Scheduler:
 
     def restart(self):
         """Метод перезапуска задач."""
-        self.stop()
-        self.run()
+        self.__queue_processor.stop()
+        self.__queue_processor.run(self.queue)
 
     def __load_queue(self):
         if self.__job_repository == None:
             return []
-        self.__job_repository.__load_queue()
+        return self.__job_repository.get_jobs()
 
     def __save_queue(self):
         """Метод сохранения не выполненных задач."""
@@ -95,17 +70,9 @@ class Scheduler:
             return
         self.__job_repository.save_jobs(self.__queue)
 
-    def __save_and_clear_queue(self):
-        self.__save_queue()
-        self.__queue = []
-
-    def stop(self, save=True):
+    def stop(self):
         """Метод остановки задач."""
-        if not self.__is_running and save == True:
-            self.__save_and_clear_queue()
+        if not self.__queue_processor:
             return
-        self.__event.set()
-        self.__thread.join()
-        self.__is_running = False
-        if save == True:
-            self.__save_and_clear_queue()
+        self.__queue_processor.stop()
+        self.__save_queue()

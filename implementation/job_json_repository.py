@@ -23,6 +23,8 @@ class JobJsonRepository(JobRepository):
     def get_jobs(self):
         jobs = []
         data = self.__reader_writer.read()
+        if data in (None, ''):
+            return jobs
         json_jobs = json.loads(data)
         for item in json_jobs:
             job = Job.get_job(item, self.__job_factory)
