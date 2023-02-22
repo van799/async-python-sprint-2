@@ -42,7 +42,7 @@ class Scheduler:
 
     @staticmethod
     def __process_queue(event, queue, pool_size):
-        """Метод  для обработки очереди и запуска задач."""
+        """Метод для обработки очереди и запуска задач."""
         while True:
             job_count = 0
             for job in queue:
@@ -67,7 +67,10 @@ class Scheduler:
         self.__event = Event()
         self.__thread = threading.Thread(
             target=self.__process_queue,
-            args=(self.__event, self.__queue, self.__pool_size,)
+            args=(self.__event,
+                  self.__queue,
+                  self.__pool_size,
+                  )
         )
         self.__thread.start()
         self.__is_running = True
