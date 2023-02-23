@@ -6,7 +6,6 @@ from implementation.tasks.empty_task import EmptyTask
 from implementation.queue_processor import QueueProcessor
 from implementation.file_read_write import FileReadWrite
 from implementation.job_json_repository import JobJsonRepository
-from implementation.job_factory import JobFactory
 from implementation.task_factory import TaskFactory
 
 file_name = './data/scheduler.dat'
