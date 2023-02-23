@@ -86,7 +86,7 @@ class Job:
         task = task_creator()
         return Job(
             task=task,
-            start_at=job_descriptor['start_at'],
+            start_at=job_descriptor.start_at,
             max_working_time=job_descriptor['max_working_time'],
             tries=job_descriptor['tries'],
             dependencies=job_descriptor['dependencies'])
