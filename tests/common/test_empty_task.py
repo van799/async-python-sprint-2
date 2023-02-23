@@ -1,7 +1,7 @@
-from core.task import Task
+from core.task_base import TaskBase
 
 
-class TestEmptyTask(Task):
+class TestEmptyTask(TaskBase):
     def __init__(self, param=None):
         super().__init__(param)
 
@@ -10,4 +10,3 @@ class TestEmptyTask(Task):
 
     def execute(self):
         print('hello world')
-

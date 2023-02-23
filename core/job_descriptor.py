@@ -5,4 +5,3 @@ class JobDescriptor:
     max_working_time = -1,
     tries = 0,
     dependencies = []
-

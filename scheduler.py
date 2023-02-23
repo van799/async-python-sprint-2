@@ -4,7 +4,7 @@ from threading import Event
 from time import sleep
 
 from core.job import Job
-from core.job_repository import JobRepository
+from core.job_repository_base import JobRepositoryBase
 
 
 class Scheduler:

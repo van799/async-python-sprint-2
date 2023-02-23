@@ -1,7 +1,7 @@
-from core.job_repository import JobRepository
+from core.job_repository_base import JobRepositoryBase
 
 
-class TestJobRepository(JobRepository):
+class TestJobRepository(JobRepositoryBase):
     def __init__(self, items=[]):
         super().__init__()
         self.__items = items
