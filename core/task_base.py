@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Task(ABC):
+class TaskBase(ABC):
     def __init__(self, param=None):
         self.__param = param
         self.__complete = False

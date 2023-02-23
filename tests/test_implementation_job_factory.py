@@ -33,3 +33,6 @@ class TestJobFactory(unittest.TestCase):
         job_object.register_job(name_task, my_func)
         job_create_task = job_object.get_job_creator(name_task)
         self.assertEqual(job_create_task(), test_value)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,4 +1,4 @@
-from core.read_write import ReaderWriter
+from core.read_write_base import ReaderWriter
 
 
 class TestReadWrite(ReaderWriter):

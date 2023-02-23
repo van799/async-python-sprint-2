@@ -73,3 +73,6 @@ class JobTest(unittest.TestCase):
         time_now = datetime.strptime('2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertFalse(self.task.complete)
+
+if __name__ == '__main__':
+    unittest.main()

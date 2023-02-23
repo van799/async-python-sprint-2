@@ -1,9 +1,9 @@
 import os.path
 
-from core.read_write import ReaderWriter
+from core.read_write_base import ReaderWriterBase
 
 
-class FileReadWrite(ReaderWriter):
+class FileReadWrite(ReaderWriterBase):
     def __init__(self, file_name):
         super().__init__()
         self.__file_name = file_name

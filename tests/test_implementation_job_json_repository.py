@@ -1,12 +1,14 @@
-import json
 import unittest
+import json
 
-from tests.common.test_read_writer import TestReadWrite
 from core.job import Job
-from tests.common.test_empty_task import TestEmptyTask
+from implementation.job_descriptor_encoder import JobDescriptorEncoder
 from implementation.job_factory import JobFactory
 from implementation.job_json_repository import JobJsonRepository
-from implementation.job_descriptor_encoder import JobDescriptorEncoder
+
+from tests.common.test_empty_task import TestEmptyTask
+from tests.common.test_read_writer import TestReadWrite
+
 
 
 class TestJobJsonRepository(unittest.TestCase):
@@ -57,3 +59,5 @@ class TestJobJsonRepository(unittest.TestCase):
         saved_jobs = job_json_repository.get_jobs()
         job_empty_task = any(x.task.name == 'test_empty_task' for x in saved_jobs)
         self.assertNotEqual(job_empty_task, None)
+if __name__ == '__main__':
+    unittest.main()

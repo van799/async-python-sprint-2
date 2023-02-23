@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ReaderWriter(ABC):
+class ReaderWriterBase(ABC):
     @abstractmethod
     def read(self):
         pass

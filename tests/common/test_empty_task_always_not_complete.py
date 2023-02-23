@@ -1,7 +1,7 @@
-from core.task import Task
+from core.task_base import TaskBase
 
 
-class TestEmptyTaskAlwaysNotComplete(Task):
+class TestEmptyTaskAlwaysNotComplete(TaskBase):
     def __init__(self, param=None):
         super().__init__(param)
 
