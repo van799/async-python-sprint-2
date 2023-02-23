@@ -3,7 +3,4 @@ venv/
 __pycache__/
 *.pyc
 *.json
-
-
-
 data/scheduler.dat
