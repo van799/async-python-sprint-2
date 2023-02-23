@@ -10,4 +10,3 @@ class TestEmptyTask(TaskBase):
 
     def execute(self):
         print('hello world')
-

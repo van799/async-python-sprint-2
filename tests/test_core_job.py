@@ -11,24 +11,29 @@ class JobTest(unittest.TestCase):
     def test_job_run_task_without_any_conditions(self):
         self.task = TestEmptyTask()
         self.job = Job(self.task)
-        time_now = datetime.strptime('2023-01-30 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-01-30 23:37:13', '%Y-%m-%d %H:%M:%S')
 
         self.job.run(time_now)
         self.assertTrue(self.task.complete)
 
     def test_job_not_run_task_before_start_time(self):
         self.task = TestEmptyTask()
-        start_at = datetime.strptime('2023-01-29 23:37:13', '%Y-%m-%d %H:%M:%S')
+        start_at = datetime.strptime(
+            '2023-01-29 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job = Job(self.task, start_at=start_at)
-        time_now = datetime.strptime('2023-01-28 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-01-28 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertFalse(self.task.complete)
 
     def test_job_run_task_after_start_time(self):
         self.task = TestEmptyTask()
-        start_at = datetime.strptime('2023-01-30 23:37:13', '%Y-%m-%d %H:%M:%S')
+        start_at = datetime.strptime(
+            '2023-01-30 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job = Job(self.task, start_at=start_at)
-        time_now = datetime.strptime('2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertTrue(self.task.complete)
 
@@ -37,7 +42,8 @@ class JobTest(unittest.TestCase):
         tries = 5
         self.job = Job(self.task, tries=tries)
         self.job.tries_count = 4
-        time_now = datetime.strptime('2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertTrue(self.task.complete)
 
@@ -46,7 +52,8 @@ class JobTest(unittest.TestCase):
         tries = 5
         self.job = Job(self.task, tries=tries)
         self.job.tries_count = 6
-        time_now = datetime.strptime('2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertFalse(self.task.complete)
 
@@ -58,7 +65,8 @@ class JobTest(unittest.TestCase):
             TestEmptyTaskAlwaysComplete()
         ]
         self.job = Job(self.task, dependencies=dependencies)
-        time_now = datetime.strptime('2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertTrue(self.task.complete)
 
@@ -70,9 +78,11 @@ class JobTest(unittest.TestCase):
             TestEmptyTaskAlwaysComplete()
         ]
         self.job = Job(self.task, dependencies=dependencies)
-        time_now = datetime.strptime('2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
+        time_now = datetime.strptime(
+            '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
         self.job.run(time_now)
         self.assertFalse(self.task.complete)
+
 
 if __name__ == '__main__':
     unittest.main()

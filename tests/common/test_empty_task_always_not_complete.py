@@ -14,4 +14,3 @@ class TestEmptyTaskAlwaysNotComplete(TaskBase):
 
     def execute(self):
         print('hello world')
-

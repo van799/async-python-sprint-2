@@ -81,10 +81,11 @@ class Job:
     @staticmethod
     def get_job(job_descriptor, task_factory):
 
-        task_creator = task_factory.get_task_creator(job_descriptor['task_name'])
+        task_creator = task_factory.get_task_creator(
+            job_descriptor['task_name'])
         task = task_creator()
         return Job(
-            task = task, 
+            task=task,
             start_at=job_descriptor['start_at'],
             max_working_time=job_descriptor['max_working_time'],
             tries=job_descriptor['tries'],

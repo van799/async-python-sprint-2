@@ -13,7 +13,3 @@ class EmptyTask(TaskBase):
     def execute(self):
         sleep(1)
         print('hello world')
-
-
-
-

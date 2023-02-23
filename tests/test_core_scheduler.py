@@ -27,10 +27,12 @@ class SchedulerTest(unittest.TestCase):
         job_repository = TestJobRepository()
         scheduler = Scheduler(TestQueueProcessor(), job_repository)
         for i in range(max_job_count):
-            scheduler.schedule(task=TestEmptyTask(), max_working_time=-1, tries=0)
+            scheduler.schedule(task=TestEmptyTask(),
+                               max_working_time=-1, tries=0)
         scheduler.stop()
 
         self.assertEqual(len(job_repository.get_jobs()), max_job_count)
+
 
 if __name__ == '__main__':
     unittest.main()
