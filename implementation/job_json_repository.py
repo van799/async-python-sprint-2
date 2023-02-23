@@ -16,8 +16,9 @@ class JobJsonRepository(JobRepositoryBase):
         data = self.__reader_writer.read_or_create()
         if data in (None, ''):
             return jobs
-        job_descriptors = json.loads(data, object_hook=lambda d: JobDescriptor(**d))
-        for descriptor in job_descriptors:
+        json_job_descriptors = json.loads(data)
+        for json_descriptor in json_job_descriptors:
+            descriptor = JobDescriptor(json_descriptor)
             job = Job.get_job(descriptor, self.__task_factory)
             jobs.append(job)
         return jobs
