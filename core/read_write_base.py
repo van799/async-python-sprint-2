@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class ReaderWriterBase(ABC):
     @abstractmethod
-    def read(self):
+    def read_or_create(self):
         pass
 
     @abstractmethod

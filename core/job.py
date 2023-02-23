@@ -72,6 +72,7 @@ class Job:
     def get_job_descriptor(self):
         job_descriptor = JobDescriptor()
         job_descriptor.task_name = self.task.name()
+        job_descriptor.task_param = self.task.param
         job_descriptor.start_at = self.start_at
         job_descriptor.max_working_time = self.max_working_time
         job_descriptor.tries = self.tries
@@ -83,7 +84,7 @@ class Job:
 
         task_creator = task_factory.get_task_creator(
             job_descriptor['task_name'])
-        task = task_creator()
+        task = task_creator(job_descriptor.task_param)
         return Job(
             task=task,
             start_at=job_descriptor.start_at,

@@ -1,7 +1,7 @@
-from core.read_write_base import ReaderWriter
+from core.read_write_base import ReaderWriterBase
 
 
-class TestReadWrite(ReaderWriter):
+class TestReadWrite(ReaderWriterBase):
     def __init__(self, file_content=''):
         super().__init__()
         self.__file_content = file_content
@@ -10,7 +10,7 @@ class TestReadWrite(ReaderWriter):
     def file_content(self):
         return self.__file_content
 
-    def read(self):
+    def read_or_create(self):
         return self.__file_content
 
     def write(self, data):

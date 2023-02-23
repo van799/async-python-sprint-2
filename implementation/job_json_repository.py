@@ -1,4 +1,6 @@
+from core.job_descriptor import JobDescriptor
 from core.job_repository_base import JobRepositoryBase
+
 import json
 from core.job import Job
 
@@ -11,7 +13,7 @@ class JobJsonRepository(JobRepositoryBase):
 
     def get_jobs(self):
         jobs = []
-        data = self.__reader_writer.read()
+        data = self.__reader_writer.read_or_create()
         if data in (None, ''):
             return jobs
         job_descriptors = json.loads(data, object_hook=lambda d: JobDescriptor(**d))
