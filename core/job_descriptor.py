@@ -19,7 +19,7 @@ class JobDescriptor:
         self.task_param = dict['task_param']
         self.start_at = None
         if(not dict['start_at'] in (None, '')):
-            self.start_at =  datetime.strptime(dict['start_at'], '%m/%d/%y %H:%M:%S')
+            self.start_at =  datetime.strptime(dict['start_at'], '%Y-%m-%d %H:%M:%S')
 
         self.max_working_time = dict['max_working_time']
         self.tries = dict['tries']
