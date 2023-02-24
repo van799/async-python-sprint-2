@@ -6,7 +6,6 @@ from core.job import Job
 
 class TestTaskFactory(unittest.TestCase):
     def test_register_task_register_new_task_creations_method(self):
-        
         task_dict = {
             'create_file': 'create_file',
             'del_file': 'del_file',
@@ -36,6 +35,7 @@ class TestTaskFactory(unittest.TestCase):
         task_factory.register_task(name_task, creator_func)
         task_create_task = task_factory.get_task_creator(name_task)
         self.assertEqual(task_create_task(), test_value)
+
 
 if __name__ == '__main__':
     unittest.main()

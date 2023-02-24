@@ -1,3 +1,4 @@
+import datetime
 import unittest
 import json
 
@@ -14,7 +15,7 @@ class TestJobJsonRepository(unittest.TestCase):
     def setUp(self):
         self.task_factory = TaskFactory()
 
-        self.task_factory.register_task( name_task='test_empty_task', create_task=lambda p: TestEmptyTask(p))
+        self.task_factory.register_task(name_task='test_empty_task', create_task=lambda p: TestEmptyTask(p))
 
     def test_get_job_return_saved_jobs(self):
         job_descriptor = Job(task=TestEmptyTask(),
@@ -75,9 +76,93 @@ class TestJobJsonRepository(unittest.TestCase):
         # job_empty_task = any(
         #     x.task.name == 'test_empty_task' for x in saved_jobs)
 
-        job_empty_task = next((x for x in saved_jobs if x.task.name ==  'test_empty_task' ), None)
+        job_empty_task = next((x for x in saved_jobs if x.task.name == 'test_empty_task'), None)
 
         self.assertEqual(job_empty_task.task.param, task_param)
+
+    def test_get_job_descriptor_from_dict_maps_task_name(self):
+        test_task_name = 'test_name123'
+        test_dict = {
+            'task_name': test_task_name,
+            'task_param': '',
+            'start_at': '',
+            'max_working_time': '',
+            'tries': '',
+            'dependencies': '',
+        }
+
+        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(test_dict)
+        self.assertEqual(test_job_descriptor.task_name, test_task_name)
+
+    def test_get_job_descriptor_from_dict_maps_task_param(self):
+        test_task_param = 'test_param123'
+        test_dict = {
+            'task_name': '',
+            'task_param': test_task_param,
+            'start_at': '',
+            'max_working_time': '',
+            'tries': '',
+            'dependencies': '',
+        }
+
+        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(test_dict)
+        self.assertEqual(test_job_descriptor.task_param, test_task_param)
+
+    def test_get_job_descriptor_from_dict_maps_start_at(self):
+        test_start_at = datetime.datetime(2017, 3, 11)
+        test_dict = {
+            'task_name': '',
+            'task_param': '',
+            'start_at': test_start_at.isoformat(),
+            'max_working_time': '',
+            'tries': '',
+            'dependencies': '',
+        }
+
+        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(test_dict)
+        self.assertEqual(test_job_descriptor.start_at, test_start_at)
+
+    def test_get_job_descriptor_from_dict_maps_max_working_time(self):
+        test_max_working_time = 12
+        test_dict = {
+            'task_name': '',
+            'task_param': '',
+            'start_at': '',
+            'max_working_time': test_max_working_time,
+            'tries': '',
+            'dependencies': '',
+        }
+
+        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(test_dict)
+        self.assertEqual(test_job_descriptor.max_working_time, test_max_working_time)
+
+    def test_get_job_descriptor_from_dict_maps_tries(self):
+        test_tries = 2
+        test_dict = {
+            'task_name': '',
+            'task_param': '',
+            'start_at': '',
+            'max_working_time': '',
+            'tries': test_tries,
+            'dependencies': '',
+        }
+
+        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(test_dict)
+        self.assertEqual(test_job_descriptor.tries, test_tries)
+
+    def test_get_job_descriptor_from_dict_maps_dependencies(self):
+        test_dependencies = ['test_str1', 'test_str2']
+        test_dict = {
+            'task_name': '',
+            'task_param': '',
+            'start_at': '',
+            'max_working_time': '',
+            'tries': '',
+            'dependencies': test_dependencies,
+        }
+
+        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(test_dict)
+        self.assertEqual(test_job_descriptor.dependencies, test_dependencies)
 
 
 if __name__ == '__main__':
