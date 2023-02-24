@@ -7,10 +7,11 @@ from implementation.queue_processor import QueueProcessor
 from implementation.file_read_write import FileReadWrite
 from implementation.job_json_repository import JobJsonRepository
 from implementation.task_factory import TaskFactory
+from scheduler_config import SchedulerConfig
 
-file_name = './data/scheduler.dat'
-#file_name = 'C:/temp/schedule.dat'
-read_writer = FileReadWrite(file_name)
+config = SchedulerConfig.GetConfig()
+
+read_writer = FileReadWrite(config.filename)
 task_factory = TaskFactory()
 
 # task factory нужен для создания класса такса при считывании тасок из файла.
@@ -20,7 +21,7 @@ task_factory.register_task(name_task='empty_task',
                            create_task=lambda p: EmptyTask(p))
 
 repository = JobJsonRepository(read_writer, task_factory)
-scheduler = Scheduler(QueueProcessor(), repository, pool_size=2)
+scheduler = Scheduler(QueueProcessor(), repository, pool_size=config.pool_size)
 
 if(not os.path.exists(file_name)):
     scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
