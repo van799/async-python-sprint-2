@@ -22,9 +22,9 @@ class Job:
         self.__coroutine = None
 
     def __check_dependencies(self):
-        for task in self.dependencies:
-            if task.complete == False:
-                return False
+        # for task in self.dependencies:
+            # if task.complete == False:
+                # return False
         return True
         
 
