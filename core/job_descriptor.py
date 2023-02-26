@@ -2,7 +2,7 @@ import datetime
 
 
 class JobDescriptor:
-
+    """Класс описание для каждой созданной TASK """
     def __init__(self):
 
         # job_name = ''

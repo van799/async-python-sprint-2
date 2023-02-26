@@ -7,6 +7,7 @@ from core.queue_processor_base import QueueProcessorBase
 
 
 class QueueProcessor(QueueProcessorBase):
+    """Класс для обработки очереди и запуска задач."""
     def __init__(self, job_repository=None, pool_size=10):
         self.__pool_size = pool_size
         self.__queue = None
@@ -18,7 +19,6 @@ class QueueProcessor(QueueProcessorBase):
 
     @staticmethod
     def __process_queue(event, queue, pool_size):
-        """Метод для обработки очереди и запуска задач."""
         while True:
             job_count = 0
             for job in queue:
@@ -35,6 +35,7 @@ class QueueProcessor(QueueProcessorBase):
             sleep(1)
 
     def run(self, queue):
+        """Метод отвечает за запуск TASK в потоке"""
         if self.__is_running:
             return
 

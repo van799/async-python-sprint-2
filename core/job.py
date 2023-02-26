@@ -4,7 +4,6 @@ from core.job_descriptor import JobDescriptor
 
 class Job:
     """Класс описывающий задачу планировщика и её методы."""
-
     def __init__(self,
                  task,
                  start_at=None,
@@ -23,10 +22,9 @@ class Job:
 
     def __check_dependencies(self):
         # for task in self.dependencies:
-            # if task.complete == False:
-                # return False
+        # if task.complete == False:
+        # return False
         return True
-        
 
     def __ready_to_execute(self, time_now):
         if self.__co_execute != None:
@@ -57,20 +55,24 @@ class Job:
 
     @property
     def is_running(self):
+        """Метод для выставления флага, TASK в работе"""
         return self.task.is_running
 
     @property
     def is_complete(self):
+        """Метод для выставления флага, TASK в выполнена"""
         return self.task.complete
 
     def pause(self):
         pass
 
     def stop(self):
+        """Метод остановки TASK"""
         self.__co_execute.close()
         self.__co_execute = None
 
     def get_job_descriptor(self):
+        """Метод получения описание TASK, если она считана из файла"""
         job_descriptor = JobDescriptor()
         job_descriptor.task_name = self.task.name
         job_descriptor.task_param = self.task.param
@@ -82,7 +84,7 @@ class Job:
 
     @staticmethod
     def get_job(job_descriptor, task_factory):
-
+        """Метод создания JOB, после получение описание TASK"""
         task_creator = task_factory.get_task_creator(
             job_descriptor.task_name)
         task = task_creator(job_descriptor.task_param)
