@@ -23,7 +23,7 @@ task_factory.register_task(name_task='empty_task',
 repository = JobJsonRepository(read_writer, task_factory)
 scheduler = Scheduler(QueueProcessor(), repository, pool_size=config.pool_size)
 
-if(not os.path.exists(file_name)):
+if not os.path.exists(file_name):
     scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
     scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
     scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
