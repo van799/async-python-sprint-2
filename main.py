@@ -3,6 +3,10 @@ import os.path
 from core.job import Job
 from scheduler import Scheduler
 from implementation.tasks.empty_task import EmptyTask
+from implementation.tasks.create_file_task import CreateFileTask
+from implementation.tasks.create_dir_task import CreateDirTask
+
+
 from implementation.queue_processor import QueueProcessor
 from implementation.file_read_write import FileReadWrite
 from implementation.job_json_repository import JobJsonRepository
@@ -17,25 +21,30 @@ task_factory = TaskFactory()
 # task factory нужен для создания класса такса при считывании тасок из файла.
 # пример: мы считываем название таски из файла но как он создаст клас таски? а так что таска зарегистрирована
 # c нужным класом
-task_factory.register_task(name_task='empty_task',
-                           create_task=lambda p: EmptyTask(p))
+task_factory.register_task(name_task='create_file',
+                           create_task=lambda p: CreateFileTask(p))
+task_factory.register_task(name_task='create_dir',
+                           create_task=lambda p: CreateDirTask(p))
 
 repository = JobJsonRepository(read_writer, task_factory)
 scheduler = Scheduler(QueueProcessor(), repository, pool_size=config.pool_size)
 
-if(not os.path.exists(config.filename)):
-    scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)  # 10
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+if not os.path.exists(config.filename):
+    scheduler.schedule(task=CreateFileTask('create_file'), max_working_time=-1, tries=0)
+    #scheduler.schedule(task=CreateDirTask('create_dir'), max_working_time=-1, tries=0)
+
+    # scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)  # 10
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
 
 scheduler.run()
 time.sleep(10)

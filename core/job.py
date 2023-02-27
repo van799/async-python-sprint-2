@@ -21,6 +21,7 @@ class Job:
         self.__coroutine = None
 
     def __check_dependencies(self):
+        """Метод проверки зависимостей"""
         # for task in self.dependencies:
         # if task.complete == False:
         # return False

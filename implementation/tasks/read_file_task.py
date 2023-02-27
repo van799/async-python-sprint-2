@@ -3,14 +3,15 @@ from time import sleep
 from core.task_base import TaskBase
 
 
-class EmptyTask(TaskBase):
+class CreateFileTask(TaskBase):
     def __init__(self, param=None):
         super().__init__(param)
 
     @property
     def name(self):
-        return 'empty_task'
+        return 'create file'
 
     def execute(self):
-        sleep(1)
-        print('hello world')
+        with open(f'{self.param}.txt',) as f:
+            lines = f.readlines()
+        print(f'read file: {lines}')

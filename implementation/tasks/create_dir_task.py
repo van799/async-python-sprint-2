@@ -1,16 +1,16 @@
-from time import sleep
-
+import os
 from core.task_base import TaskBase
 
 
-class EmptyTask(TaskBase):
+class CreateDirTask(TaskBase):
     def __init__(self, param=None):
         super().__init__(param)
 
     @property
     def name(self):
-        return 'empty_task'
+        return 'create dir'
 
     def execute(self):
-        sleep(1)
-        print('hello world')
+        os.mkdir(self.param)
+        print(f'Create dir  {self.param}')
+
