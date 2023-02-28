@@ -22,7 +22,7 @@ class JobQueueDispatcherTest(unittest.TestCase):
             job_3.job_id
         ]
 
-        job = Job(task, dependencies=dependencies)
+        job = Job(task = TestEmptyTask(), dependencies=dependencies)
         queue = [job_1, job_2, job_3, job]
 
         job_queue_dispatcher = JobQueueDispatcher(queue)
