@@ -17,13 +17,15 @@ class JobJsonRepository(JobRepositoryBase):
     def get_job_descriptor_from_dict(dict_obj):
         """Метод получение описание Job из словаря."""
         job_descriptor = JobDescriptor()
-        # job_name = dict['job_name']
+        if 'job_id' in dict_obj.keys():
+            job_descriptor.job_id = dict_obj['job_id']
         job_descriptor.task_name = dict_obj['task_name']
         job_descriptor.task_param = dict_obj['task_param']
         job_descriptor.start_at = None
 
         if (not dict_obj['start_at'] in (None, '')):
-            job_descriptor.start_at = datetime.fromisoformat(dict_obj['start_at'])
+            job_descriptor.start_at = datetime.fromisoformat(
+                dict_obj['start_at'])
 
         job_descriptor.max_working_time = dict_obj['max_working_time']
         job_descriptor.tries = dict_obj['tries']
@@ -39,7 +41,8 @@ class JobJsonRepository(JobRepositoryBase):
             return jobs
         json_job_descriptors = json.loads(data)
         for json_descriptor in json_job_descriptors:
-            descriptor = JobJsonRepository.get_job_descriptor_from_dict(json_descriptor)
+            descriptor = JobJsonRepository.get_job_descriptor_from_dict(
+                json_descriptor)
             job = Job.get_job(descriptor, self.__task_factory)
             jobs.append(job)
         return jobs

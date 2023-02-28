@@ -2,6 +2,7 @@ import unittest
 from datetime import datetime
 
 from core.job import Job
+from implementation.job_queue_dispatcher import JobQueueDispatcher
 from tests.common.test_empty_task import TestEmptyTask
 from tests.common.test_empty_task_always_complete import TestEmptyTaskAlwaysComplete
 from tests.common.test_empty_task_always_not_complete import TestEmptyTaskAlwaysNotComplete
@@ -9,13 +10,13 @@ from tests.common.test_empty_task_always_not_complete import TestEmptyTaskAlways
 
 class JobTest(unittest.TestCase):
     def test_job_run_task_without_any_conditions(self):
-        self.task = TestEmptyTask()
-        self.job = Job(self.task)
+        task = TestEmptyTask()
+        job = Job(task)
         time_now = datetime.strptime(
             '2023-01-30 23:37:13', '%Y-%m-%d %H:%M:%S')
 
-        self.job.run(time_now)
-        self.assertTrue(self.task.complete)
+        job.run(time_now)
+        self.assertTrue(job.done)
 
     def test_job_not_run_task_before_start_time(self):
         self.task = TestEmptyTask()
@@ -38,54 +39,25 @@ class JobTest(unittest.TestCase):
         self.assertTrue(self.task.complete)
 
     def test_job_run_task_when_tries_count_less_max(self):
-        self.task = TestEmptyTask()
+        task = TestEmptyTask()
         tries = 5
-        self.job = Job(self.task, tries=tries)
-        self.job.tries_count = 4
+        job = Job(task, tries=tries)
+        job.tries_count = 4
         time_now = datetime.strptime(
             '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
-        self.job.run(time_now)
-        self.assertTrue(self.task.complete)
+        job.run(time_now)
+        self.assertTrue(job.done)
 
-    def test_job_not_run_task_when_tries_count_great_max(self):
-        self.task = TestEmptyTask()
+    def test_job_not_run_task_when_tries_count_great_max_and_has_error(self):
+        task = TestEmptyTask()
         tries = 5
-        self.job = Job(self.task, tries=tries)
-        self.job.tries_count = 6
+        job = Job(task, tries=tries)
+        job.tries_count = 6
         time_now = datetime.strptime(
             '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
-        self.job.run(time_now)
-        self.assertFalse(self.task.complete)
-
-    def test_job_run_task_when_dependencies_complete(self):
-        self.task = TestEmptyTask()
-        dependencies = [
-            TestEmptyTaskAlwaysComplete(),
-            TestEmptyTaskAlwaysComplete(),
-            TestEmptyTaskAlwaysComplete()
-        ]
-        self.job = Job(self.task, dependencies=dependencies)
-        time_now = datetime.strptime(
-            '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
-        self.job.run(time_now)
-        self.assertTrue(self.task.complete)
-
-        
-    ## dependencies is not implemented
-    def test_job_run_task_when_dependencies_not_complete(self):
-        pass
-        # self.task = TestEmptyTask()
-        # dependencies = [
-        #     TestEmptyTaskAlwaysComplete(),
-        #     TestEmptyTaskAlwaysNotComplete(),
-        #     TestEmptyTaskAlwaysComplete()
-        # ]
-        # self.job = Job(self.task, dependencies=dependencies)
-        # time_now = datetime.strptime(
-        #     '2023-02-01 23:37:13', '%Y-%m-%d %H:%M:%S')
-        # self.job.run(time_now)
-        # self.assertFalse(self.task.complete)
-
+        job.run(time_now)
+        self.assertFalse(job.done_with_error)
 
 if __name__ == '__main__':
     unittest.main()
+

@@ -1,40 +1,47 @@
 import time
+import uuid
+from datetime import datetime
+# from core.job_base import JobBase
 from core.job_descriptor import JobDescriptor
+from core.task_base import TaskBase
 
 
 class Job:
     """Класс описывающий задачу планировщика и её методы."""
     def __init__(self,
                  task,
-                 start_at=None,
-                 max_working_time=-1,
-                 tries=0,
-                 dependencies=[]
+                 job_id='',
+                 start_at: datetime = None,
+                 max_working_time: int = -1,
+                 tries: int = 0,
+                 dependencies: [] = [],
+                 done: bool = False,
+                 done_with_error: bool = False,
+                 error_message: str = ''
                  ):
-        self.task = task
-        self.start_at = start_at
-        self.max_working_time = max_working_time
-        self.tries = tries
-        self.dependencies = dependencies
-        self.tries_count = 0
+
+        self.__task = task
+        self.__start_at = start_at
+        self.__max_working_time = max_working_time
+        self.__tries = tries
+        self.__dependencies = dependencies
+        self.__tries_count = 0
         self.__co_execute = None
         self.__coroutine = None
+        self.__done = done
+        self.__done_with_error = done_with_error
+        self.__error_message = error_message
+        self.__job_id = job_id
 
-    def __check_dependencies(self):
-        """Метод проверки зависимостей"""
-        # for task in self.dependencies:
-        # if task.complete == False:
-        # return False
-        return True
+        if (self.__job_id in (None, '')):
+            self.__job_id = str(uuid.uuid1())
 
     def __ready_to_execute(self, time_now):
         if self.__co_execute != None:
             return False
-        if self.start_at != None and self.start_at >= time_now:
+        if self.__start_at != None and self.__start_at >= time_now:
             return False
-        if self.tries_count > self.tries and self.tries > 0:
-            return False
-        if self.__check_dependencies() == False:
+        if self.__tries_count > self.__tries and self.__tries > 0:
             return False
         return True
 
@@ -50,19 +57,59 @@ class Job:
         current_time = time_now
         while True:
             if self.__ready_to_execute(current_time) == True:
-                self.tries_count += 1
-                self.task.do_task()
+                if self.__tries_count <= self.__tries:
+                    self.__tries_count += 1
+                    self.__task.do_task()
+                else:
+                    self.__done_with_error = True
+                    self.__error_message = 'Attempts count is excided'
+                    
+                self.__done = True
             current_time = (yield)
 
     @property
-    def is_running(self):
-        """Метод для выставления флага, TASK в работе"""
+    def job_id(self):
+        return self.__job_id
+
+    @property
+    def task_name(self):
+        return self.__task.name
+
+    @property
+    def task_param(self):
+        return self.__task.param
+
+    @property
+    def start_at(self) -> datetime:
+        return self.__start_at
+
+    @property
+    def max_working_time(self) -> int:
+        return self.__max_working_time
+
+    @property
+    def tries(self) -> int:
+        return self.__tries
+
+    @property
+    def dependencies(self):
+        return self.__dependencies
+
+    @property
+    def is_running(self) -> bool:
         return self.task.is_running
 
     @property
-    def is_complete(self):
-        """Метод для выставления флага, TASK в выполнена"""
-        return self.task.complete
+    def done(self) -> bool:
+        return self.__task.complete
+
+    @property
+    def done_with_error(self) -> bool:
+        return self.__done_with_error
+
+    @property
+    def error_message(self) -> str:
+        return self.__error_message
 
     def pause(self):
         pass
@@ -75,8 +122,9 @@ class Job:
     def get_job_descriptor(self):
         """Метод получения описание TASK, если она считана из файла"""
         job_descriptor = JobDescriptor()
-        job_descriptor.task_name = self.task.name
-        job_descriptor.task_param = self.task.param
+        job_descriptor.job_id = self.job_id
+        job_descriptor.task_name = self.task_name
+        job_descriptor.task_param = self.task_param
         job_descriptor.start_at = self.start_at
         job_descriptor.max_working_time = self.max_working_time
         job_descriptor.tries = self.tries
@@ -90,6 +138,7 @@ class Job:
             job_descriptor.task_name)
         task = task_creator(job_descriptor.task_param)
         return Job(
+            job_id=job_descriptor.job_id,
             task=task,
             start_at=job_descriptor.start_at,
             max_working_time=job_descriptor.max_working_time,

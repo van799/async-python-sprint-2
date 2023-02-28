@@ -11,6 +11,7 @@ from implementation.queue_processor import QueueProcessor
 from implementation.file_read_write import FileReadWrite
 from implementation.job_json_repository import JobJsonRepository
 from implementation.task_factory import TaskFactory
+from implementation.job_queue_dispatcher import JobQueueDispatcher 
 from scheduler_config import SchedulerConfig
 
 config = SchedulerConfig.GetConfig()
@@ -27,7 +28,7 @@ task_factory.register_task(name_task='create_dir',
                            create_task=lambda p: CreateDirTask(p))
 
 repository = JobJsonRepository(read_writer, task_factory)
-scheduler = Scheduler(QueueProcessor(), repository, pool_size=config.pool_size)
+scheduler = Scheduler(QueueProcessor(JobQueueDispatcher([])), repository, pool_size=config.pool_size)
 
 if not os.path.exists(config.filename):
     scheduler.schedule(task=CreateFileTask('create_file'), max_working_time=-1, tries=0)
