@@ -5,3 +5,4 @@ __pycache__/
 *.json
 data/*
 ~$Tracker.xlsx
+.~lock.Tracker.xlsx#
