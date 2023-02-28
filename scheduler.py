@@ -12,7 +12,6 @@ class Scheduler:
 
     def __init__(self, queue_processor, job_repository=None, pool_size=10):
         self.__pool_size = pool_size
-        self.__queue = []
         self.__is_running = False
         self.__job_repository = job_repository
         self.__queue_processor = queue_processor
@@ -30,7 +29,8 @@ class Scheduler:
         was_running = self.__is_running
         if self.__is_running:
             self.stop(save=False)
-        self.__queue.append(
+
+        self.__queue_processor.add_job_to_queue(
             Job(task,
                 start_at=start_at,
                 max_working_time=max_working_time,
@@ -46,33 +46,29 @@ class Scheduler:
         if self.__queue_processor.is_running:
             return
 
-        loaded_jobs = self.__load_queue()
-        self.__queue.extend(loaded_jobs)
-        self.__queue_processor.run(self.queue)
-
-    @property
-    def queue(self):
-        return self.__queue
+        loaded_jobs = self.__load_jobs()
+        self.__queue_processor.add_jobs_to_queue(loaded_jobs)
+        self.__queue_processor.run()
 
     def restart(self):
         """Метод перезапуска задач."""
         self.__queue_processor.stop()
-        self.__queue_processor.run(self.queue)
+        self.__queue_processor.run()
 
-    def __load_queue(self):
+    def __load_jobs(self):
         if self.__job_repository == None:
             return []
         return self.__job_repository.get_jobs()
 
-    def __save_queue(self):
+    def __save_jobs(self):
         """Метод сохранения не выполненных задач."""
         if self.__job_repository == None:
             return
-        self.__job_repository.save_jobs(self.__queue)
+        self.__job_repository.save_jobs(self.__queue_processor.get_queue())
 
     def stop(self):
         """Метод остановки задач."""
         if not self.__queue_processor:
             return
         self.__queue_processor.stop()
-        self.__save_queue()
+        self.__save_jobs()

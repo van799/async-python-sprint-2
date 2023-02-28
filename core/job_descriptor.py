@@ -5,10 +5,10 @@ class JobDescriptor:
 
     def __init__(self):
 
-        # job_name = ''
-        self.task_name = ''
-        self.task_param = ''
-        self.start_at = None,
-        self.max_working_time = -1,
-        self.tries = 0,
-        self.dependencies = []
+        self.job_id = ''
+        self.task_name:str = ''
+        self.task_param:str = ''
+        self.start_at:datetime = None,
+        self.max_working_time:int = -1,
+        self.tries:int = 0,
+        self.dependencies:list[str] = []

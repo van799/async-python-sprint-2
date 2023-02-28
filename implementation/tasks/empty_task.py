@@ -11,5 +11,4 @@ class EmptyTask(TaskBase):
         return 'empty_task'
 
     def execute(self):
-        sleep(1)
         print('hello world')
