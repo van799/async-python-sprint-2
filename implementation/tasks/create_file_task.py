@@ -12,6 +12,6 @@ class CreateFileTask(TaskBase):
         return 'create file'
 
     def execute(self):
-        with open(f'{self.param}.txt', 'w') as f:
+        with open(f'{self.param}', 'w') as f:
             f.write(f'{self.param}')
         print(f'Create file {self.param}')

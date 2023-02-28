@@ -31,7 +31,7 @@ repository = JobJsonRepository(read_writer, task_factory)
 scheduler = Scheduler(QueueProcessor(JobQueueDispatcher([])), repository, pool_size=config.pool_size)
 
 if not os.path.exists(config.filename):
-    scheduler.schedule(task=CreateFileTask('create_file'), max_working_time=-1, tries=0)
+    scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
     #scheduler.schedule(task=CreateDirTask('create_dir'), max_working_time=-1, tries=0)
 
     # scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
