@@ -21,7 +21,7 @@ task_factory = TaskFactory()
 # task factory нужен для создания класса такса при считывании тасок из файла.
 # пример: мы считываем название таски из файла но как он создаст клас таски? а так что таска зарегистрирована
 # c нужным класом
-task_factory.register_task(name_task='create_file',
+task_factory.register_task(name_task='create file',
                            create_task=lambda p: CreateFileTask(p))
 task_factory.register_task(name_task='create_dir',
                            create_task=lambda p: CreateDirTask(p))
