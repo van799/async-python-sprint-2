@@ -5,13 +5,13 @@ from scheduler import Scheduler
 from implementation.tasks.empty_task import EmptyTask
 from implementation.tasks.create_file_task import CreateFileTask
 from implementation.tasks.create_dir_task import CreateDirTask
-
+from implementation.tasks.delete_file_task import DeleteFileTask
 
 from implementation.queue_processor import QueueProcessor
 from implementation.file_read_write import FileReadWrite
 from implementation.job_json_repository import JobJsonRepository
 from implementation.task_factory import TaskFactory
-from implementation.job_queue_dispatcher import JobQueueDispatcher 
+from implementation.job_queue_dispatcher import JobQueueDispatcher
 from scheduler_config import SchedulerConfig
 
 config = SchedulerConfig.GetConfig()
@@ -24,6 +24,8 @@ task_factory = TaskFactory()
 # c нужным класом
 task_factory.register_task(name_task='create file',
                            create_task=lambda p: CreateFileTask(p))
+task_factory.register_task(name_task='delete file',
+                           create_task=lambda p: DeleteFileTask(p))
 task_factory.register_task(name_task='create_dir',
                            create_task=lambda p: CreateDirTask(p))
 
@@ -31,9 +33,20 @@ repository = JobJsonRepository(read_writer, task_factory)
 saved_job_count = len(repository.get_jobs())
 scheduler = Scheduler(QueueProcessor(JobQueueDispatcher([])), repository, pool_size=config.pool_size)
 
-if not os.path.exists(config.filename) or saved_job_count<=0:
-    scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
-    #scheduler.schedule(task=CreateDirTask('create_dir'), max_working_time=-1, tries=0)
+if not os.path.exists(config.filename) or saved_job_count <= 0:
+    job_create_dir = Job(CreateDirTask('data/create_file'))
+
+    job_create_file = Job(CreateFileTask('data/create_file/create_file.txt'),
+                          dependencies=[job_create_dir.job_id])
+    job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'), dependencies=[job_create_file.job_id])
+
+    scheduler.schedule(job_create_dir)
+    scheduler.schedule(job_create_file)
+    scheduler.schedule(job_delete_file)
+
+    # scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
+    # scheduler.schedule(task=CreateDirTask('create_dir'), max_working_time=-1, tries=0)
 
     # scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
     # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)

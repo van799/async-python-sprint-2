@@ -8,7 +8,7 @@ class DeleteFileTask(TaskBase):
 
     @property
     def name(self):
-        return 'delete dir'
+        return 'delete file'
 
     def execute(self):
         if os.path.isfile(self.param):
