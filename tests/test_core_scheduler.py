@@ -31,8 +31,8 @@ class SchedulerTest(unittest.TestCase):
         for i in range(max_job_count):
             scheduler.schedule(Job(task=TestEmptyTaskAlwaysNotComplete(), max_working_time=-1, tries=0))
         scheduler.stop()
-
-        self.assertEqual(len(job_repository.get_jobs()), max_job_count)
+        job_count = len(job_repository.get_jobs())
+        self.assertEqual(job_count, max_job_count)
 
 
 if __name__ == '__main__':
