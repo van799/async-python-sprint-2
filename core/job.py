@@ -97,11 +97,11 @@ class Job:
 
     @property
     def is_running(self) -> bool:
-        return self.task.is_running
+        return self.__task.is_running
 
     @property
     def done(self) -> bool:
-        return self.__task.complete
+        return self.__done
 
     @property
     def done_with_error(self) -> bool:

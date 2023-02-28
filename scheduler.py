@@ -63,7 +63,9 @@ class Scheduler:
         """Метод сохранения не выполненных задач."""
         if self.__job_repository == None:
             return
-        self.__job_repository.save_jobs(self.__queue_processor.get_queue())
+        jobs_to_save = list(filter(lambda o: o.done == False or o.done_with_error == True, self.__queue_processor.get_queue()))
+        
+        self.__job_repository.save_jobs(jobs_to_save)
 
     def stop(self):
         """Метод остановки задач."""

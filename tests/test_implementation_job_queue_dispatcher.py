@@ -6,15 +6,15 @@ from implementation.job_queue_dispatcher import JobQueueDispatcher
 from tests.common.test_empty_task import TestEmptyTask
 from tests.common.test_empty_task_always_complete import TestEmptyTaskAlwaysComplete
 from tests.common.test_empty_task_always_not_complete import TestEmptyTaskAlwaysNotComplete
+from tests.common.test_Job_always_complete import TestJobAlwaysComplete
 
 
 class JobQueueDispatcherTest(unittest.TestCase):
  
     def test_job_queue_dispatcher_returns_job_when_dependencies_complete(self):
-        task = TestEmptyTask()
-        job_1 = Job(TestEmptyTaskAlwaysComplete())
-        job_2 = Job(TestEmptyTaskAlwaysComplete())
-        job_3 = Job(TestEmptyTaskAlwaysComplete())
+        job_1 = TestJobAlwaysComplete()
+        job_2 = TestJobAlwaysComplete()
+        job_3 = TestJobAlwaysComplete()
 
         dependencies = [
             job_1.job_id,

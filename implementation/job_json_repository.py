@@ -57,8 +57,8 @@ class JobJsonRepository(JobRepositoryBase):
         job_descriptors = []
         for job in jobs:
             job_descriptors.append(job.get_job_descriptor())
-            json_jobs = json.dumps(
-                job_descriptors, default=lambda o: JobJsonRepository.__json_converter(o), sort_keys=True, indent=4)
 
+        json_jobs = json.dumps(
+                job_descriptors, default=lambda o: JobJsonRepository.__json_converter(o), sort_keys=True, indent=4)
         self.__reader_writer.write(json_jobs)
         return
