@@ -59,7 +59,11 @@ class Job:
             if self.__ready_to_execute(current_time) == True:
                 if self.__tries_count <= self.__tries:
                     self.__tries_count += 1
-                    self.__task.do_task()
+                    try:
+                        self.__task.do_task()
+                    except Exception as e:
+                        self.__done_with_error = True
+                        self.__error_message = f"Unexpected exception: {e}"
                 else:
                     self.__done_with_error = True
                     self.__error_message = 'Attempts count is excided'

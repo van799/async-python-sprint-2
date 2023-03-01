@@ -44,23 +44,6 @@ if not os.path.exists(config.filename) or saved_job_count <= 0:
     scheduler.schedule(job_create_file)
     scheduler.schedule(job_delete_file)
 
-    # scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=CreateDirTask('create_dir'), max_working_time=-1, tries=0)
-
-    # scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)  # 10
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-
 scheduler.run()
 time.sleep(10)
 scheduler.stop()

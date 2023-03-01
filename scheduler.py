@@ -15,7 +15,7 @@ class Scheduler:
         self.__job_repository = job_repository
         self.__queue_processor = queue_processor
 
-    def schedule(self, task,
+    def schedule(self, job,
                  start_at=None,
                  max_working_time=-1,
                  tries=0,
@@ -29,14 +29,7 @@ class Scheduler:
         if self.__is_running:
             self.stop(save=False)
 
-        self.__queue_processor.add_job_to_queue(
-            Job(task,
-                start_at=start_at,
-                max_working_time=max_working_time,
-                tries=tries,
-                dependencies=dependencies
-                )
-        )
+        self.__queue_processor.add_job_to_queue(job)
         if was_running == True:
             self.run()
 
