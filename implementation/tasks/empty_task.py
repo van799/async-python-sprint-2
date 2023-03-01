@@ -1,7 +1,5 @@
 from core.task_base import TaskBase
-from scheduler_config import get_logger
 
-logger = get_logger()
 
 
 class EmptyTask(TaskBase):
@@ -16,4 +14,4 @@ class EmptyTask(TaskBase):
 
     def execute(self) -> None:
         print('Finished test TASK.')
-        logger.info('Finished test TASK.')
+

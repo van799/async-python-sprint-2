@@ -1,9 +1,4 @@
-from time import sleep
-
 from core.task_base import TaskBase
-from scheduler_config import get_logger
-
-logger = get_logger()
 
 
 class CreateFileTask(TaskBase):

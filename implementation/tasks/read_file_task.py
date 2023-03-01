@@ -1,7 +1,4 @@
 from core.task_base import TaskBase
-from scheduler_config import get_logger
-
-logger = get_logger()
 
 
 class ReadFileTask(TaskBase):
@@ -19,6 +16,5 @@ class ReadFileTask(TaskBase):
             with open(f'{self.param}.txt', ) as f:
                 lines = f.readlines()
             print(f'read file: {lines}')
-            logger.info('Finished reading file.')
         except EnvironmentError as error:
-            logger.error(error)
+            pass

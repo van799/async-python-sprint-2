@@ -2,9 +2,7 @@ import json
 from http import HTTPStatus
 from urllib.request import urlopen
 
-from scheduler_config import get_logger
 
-logger = get_logger()
 URL_MOSCOW = 'https://code.s3.yandex.net/async-module/moscow-response.json'
 ERR_MESSAGE_TEMPLATE = "Something wrong. Please contact with mentor."
 
@@ -29,7 +27,7 @@ class YandexWeatherAPI:
                 )
             return resp
         except Exception as ex:
-            logger.error(ex)
+            pass
             raise Exception(ERR_MESSAGE_TEMPLATE)
 
     def get_forecasting(self):

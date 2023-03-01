@@ -1,19 +1,3 @@
-from datetime import datetime
-import logging
-
-
-def get_logger() -> logging.Logger:
-    """Настройки логгера для проекта."""
-
-    logging.basicConfig(
-        filename='logging.log',
-        filemode='w',
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
-    )
-    return logging.getLogger('scheduler')
-
-
 class SchedulerConfig:
     def __init__(self):
         self.__pool_size = 10

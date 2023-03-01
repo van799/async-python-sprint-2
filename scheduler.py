@@ -9,13 +9,16 @@ from core.job_repository_base import JobRepositoryBase
 
 class Scheduler:
     """Класс описывающий планировщик задач и его методы."""
-    def __init__(self, queue_processor, job_repository=None, pool_size=10):
+
+    def __init__(self, logger, queue_processor, job_repository=None, pool_size=10):
+        self.__logger = logger
         self.__pool_size = pool_size
         self.__is_running = False
         self.__job_repository = job_repository
         self.__queue_processor = queue_processor
 
-    def schedule(self, job,
+    def schedule(self,
+                 job,
                  start_at=None,
                  max_working_time=-1,
                  tries=0,
@@ -25,6 +28,7 @@ class Scheduler:
         если есть выполнение задач останавливается. В очередь можно добавить любое
         количество задач, но за один запуск планировщика будет обработано только
         то количество задач, которое соответствует pool_size планировщика. """
+        self.__logger.log_info(f'Schedule job: "{job.task_name}". Param: "{job.task_param}"')
         was_running = self.__is_running
         if self.__is_running:
             self.stop(save=False)
@@ -41,28 +45,35 @@ class Scheduler:
         loaded_jobs = self.__load_jobs()
         self.__queue_processor.add_jobs_to_queue(loaded_jobs)
         self.__queue_processor.run()
+        self.__logger.log_info(f'Scheduler started')
 
     def restart(self):
         """Метод перезапуска задач."""
         self.__queue_processor.stop()
         self.__queue_processor.run()
+        self.__logger.log_info(f'Scheduler restart')
 
     def __load_jobs(self):
         if self.__job_repository == None:
+            self.__logger.log_debug('Job repository is empty', 'Scheduler.__load_jobs')
             return []
         return self.__job_repository.get_jobs()
 
     def __save_jobs(self):
         """Метод сохранения не выполненных задач."""
         if self.__job_repository == None:
+            self.__logger.log_debug('No Jobs to save', 'Scheduler.__save_jobs')
             return
-        jobs_to_save = list(filter(lambda o: o.done == False or o.done_with_error == True, self.__queue_processor.get_queue()))
-        
+        jobs_to_save = list(
+            filter(lambda o: o.done == False or o.done_with_error == True, self.__queue_processor.get_queue()))
+
         self.__job_repository.save_jobs(jobs_to_save)
 
     def stop(self):
         """Метод остановки задач."""
         if not self.__queue_processor:
+            self.__logger.log_debug('No queue processor', 'Scheduler.stop')
             return
         self.__queue_processor.stop()
         self.__save_jobs()
+        self.__logger.log_info('Scheduler stopped')

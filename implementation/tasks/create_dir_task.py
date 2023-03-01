@@ -1,8 +1,5 @@
 import os
 from core.task_base import TaskBase
-from scheduler_config import get_logger
-
-logger = get_logger()
 
 
 class CreateDirTask(TaskBase):
@@ -19,5 +16,3 @@ class CreateDirTask(TaskBase):
         if not os.path.isdir(self.param):
             os.mkdir(self.param)
             print(f'Create dir  {self.param}')
-            logger.info('Created %s.', self.param)
-        logger.info('Finished creating dir.')

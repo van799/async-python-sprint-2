@@ -1,3 +1,4 @@
+import logging
 import time
 import os.path
 from core.job import Job
@@ -14,8 +15,10 @@ from implementation.job_json_repository import JobJsonRepository
 from implementation.task_factory import TaskFactory
 from implementation.job_queue_dispatcher import JobQueueDispatcher
 from scheduler_config import SchedulerConfig
+from implementation.logger import Logger
 
 config = SchedulerConfig.GetConfig()
+logger = Logger('logger.log', 'w', logging.DEBUG)
 
 read_writer = FileReadWrite(config.filename)
 task_factory = TaskFactory()
@@ -32,7 +35,7 @@ task_factory.register_task(name_task='create dir',
 
 repository = JobJsonRepository(read_writer, task_factory)
 saved_job_count = len(repository.get_jobs())
-scheduler = Scheduler(QueueProcessor(JobQueueDispatcher([])), repository, pool_size=config.pool_size)
+scheduler = Scheduler(logger, QueueProcessor(logger, JobQueueDispatcher([])), repository, pool_size=config.pool_size)
 
 if not os.path.exists(config.filename) or saved_job_count <= 0:
     # job_create_dir = Job(CreateDirTask('data/create_file'))
@@ -45,9 +48,11 @@ if not os.path.exists(config.filename) or saved_job_count <= 0:
     # scheduler.schedule(job_create_file)
     # scheduler.schedule(job_delete_file)
 
-    scheduler.schedule(task=CreateDirTask('data/create_dir'), max_working_time=-1, tries=0)
-    scheduler.schedule(task=CreateFileTask('data/create_dir/create_file_weather.txt'), max_working_time=-1, tries=0)
-    scheduler.schedule(task=GetWeatherTask('data/create_dir/create_file_weather.txt'), max_working_time=-1, tries=0)
+    scheduler.schedule(Job(task=CreateDirTask('data/create_dir'), max_working_time=-1, tries=0))
+    scheduler.schedule(Job(task=CreateFileTask('data/create_dir/create_file_weather.txt'), max_working_time=-1,
+                           tries=0))
+    scheduler.schedule(Job(task=GetWeatherTask('data/create_dir/create_file_weather.txt'), max_working_time=-1,
+                           tries=0))
 
 scheduler.run()
 time.sleep(10)

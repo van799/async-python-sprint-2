@@ -1,10 +1,6 @@
 from core.task_base import TaskBase
 from implementation.api_weather.api_client import YandexWeatherAPI
 from implementation.api_weather.data_classes import Forecast
-from scheduler_config import get_logger
-
-
-logger = get_logger()
 
 
 class GetWeatherTask(TaskBase):
@@ -27,4 +23,4 @@ class GetWeatherTask(TaskBase):
         with open(self.param, 'w') as f:
             f.write(f'{weather_dict}')
         print(f'Create file with weather: {self.param}')
-        logger.info('Finished getting weather forecast.')
+

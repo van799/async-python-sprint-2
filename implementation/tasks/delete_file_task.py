@@ -1,8 +1,6 @@
 import os
 from core.task_base import TaskBase
-from scheduler_config import get_logger
 
-logger = get_logger()
 
 
 class DeleteFileTask(TaskBase):
@@ -18,5 +16,4 @@ class DeleteFileTask(TaskBase):
     def execute(self) -> None:
         if os.path.isfile(self.param):
             os.remove(self.param)
-            logger.info('Deleted %s.', self.param)
-        logger.info('Finished deleting file.')
+
