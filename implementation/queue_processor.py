@@ -31,6 +31,10 @@ class QueueProcessor(QueueProcessorBase):
                     continue
                 jobs_count += 1
                 job.run(datetime.now())
+
+                if(job.done_with_error):
+                    print(job.error_message)
+
             if event.is_set():
                 break
             # sleep(1)

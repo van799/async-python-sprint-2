@@ -49,20 +49,6 @@ if not os.path.exists(config.filename) or saved_job_count <= 0:
     scheduler.schedule(task=CreateFileTask('data/create_dir/create_file_weather.txt'), max_working_time=-1, tries=0)
     scheduler.schedule(task=GetWeatherTask('data/create_dir/create_file_weather.txt'), max_working_time=-1, tries=0)
 
-
-    # scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)  # 10
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
-
 scheduler.run()
 time.sleep(10)
 scheduler.stop()
