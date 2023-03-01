@@ -3,12 +3,12 @@ from datetime import datetime
 from threading import Event
 from time import sleep
 from implementation.job_queue_dispatcher import JobQueueDispatcher
-# from core.job_base import JobBase
 
 from core.queue_processor_base import QueueProcessorBase
 
 
 class QueueProcessor(QueueProcessorBase):
+    """Класс отвечает за обработку Jobs"""
     def __init__(self, logger, job_queue_dispatcher: JobQueueDispatcher, pool_size=10):
         self.__logger = logger
         self.__pool_size = pool_size
@@ -50,15 +50,19 @@ class QueueProcessor(QueueProcessorBase):
                 break
 
     def add_jobs_to_queue(self, jobs):
+        """Метод вызывает метод job_queue_dispatcher для добавления jobs в очередь"""
         return self.__job_queue_dispatcher.add_jobs_to_queue(jobs)
 
     def add_job_to_queue(self, job):
+        """Метод вызывает метод job_queue_dispatcher для добавления job в очередь"""
         return self.__job_queue_dispatcher.add_job_to_queue(job)
 
     def get_queue(self):
+        """Метод получает job из очереди"""
         return self.__job_queue_dispatcher.get_all_jobs()
 
     def run(self):
+        """Метод запускает Job в потоке"""
         if self.__is_running:
             self.__logger.log_debug(f'Queue processor is running', 'QueueProcessor.run')
             return
@@ -73,6 +77,7 @@ class QueueProcessor(QueueProcessorBase):
         self.__logger.log_info(f'Queue processor is started')
 
     def stop(self):
+        """Метод останавливает Job"""
         if not self.__is_running:
             self.__logger.log_debug(f'Queue processor is not running', 'QueueProcessor.stop')
             return

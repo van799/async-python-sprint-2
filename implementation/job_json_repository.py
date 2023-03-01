@@ -50,11 +50,14 @@ class JobJsonRepository(JobRepositoryBase):
 
     @staticmethod
     def __json_converter(o):
+        """Метод конвертирует datetime в isoformat,
+         это сделано для возможности серилизации"""
         if isinstance(o, datetime):
             return o.isoformat()
         return o.__dict__
 
     def save_jobs(self, jobs):
+        """Метод сохраняет Jobs в репозитарий"""
         job_descriptors = []
         for job in jobs:
             job_descriptors.append(job.get_job_descriptor())
