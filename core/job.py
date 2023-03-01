@@ -61,14 +61,14 @@ class Job:
                     self.__tries_count += 1
                     try:
                         self.__task.do_task()
+                        self.__done = True
                     except Exception as e:
                         self.__done_with_error = True
                         self.__error_message = f"Unexpected exception: {e}"
                 else:
                     self.__done_with_error = True
                     self.__error_message = 'Attempts count is excided'
-                    
-                self.__done = True
+                       
             current_time = (yield)
 
     @property
