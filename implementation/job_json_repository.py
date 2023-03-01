@@ -8,6 +8,7 @@ from core.job import Job
 
 class JobJsonRepository(JobRepositoryBase):
     """Класс нужен для создания класса Job при считывании не выполненных TASK из файла."""
+
     def __init__(self, reader_writer, task_factory):
         super().__init__()
         self.__reader_writer = reader_writer
@@ -59,6 +60,6 @@ class JobJsonRepository(JobRepositoryBase):
             job_descriptors.append(job.get_job_descriptor())
 
         json_jobs = json.dumps(
-                job_descriptors, default=lambda o: JobJsonRepository.__json_converter(o), sort_keys=True, indent=4)
+            job_descriptors, default=lambda o: JobJsonRepository.__json_converter(o), sort_keys=True, indent=4)
         self.__reader_writer.write(json_jobs)
         return

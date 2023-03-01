@@ -33,13 +33,16 @@ class QueueProcessor(QueueProcessorBase):
                 job.run(datetime.now())
             if event.is_set():
                 break
-            #sleep(1)
+            # sleep(1)
 
-    def add_jobs_to_queue(self, jobs): return self.__job_queue_dispatcher.add_jobs_to_queue(jobs)
-    def add_job_to_queue(self, job): return self.__job_queue_dispatcher.add_job_to_queue(job)
+    def add_jobs_to_queue(self, jobs):
+        return self.__job_queue_dispatcher.add_jobs_to_queue(jobs)
 
+    def add_job_to_queue(self, job):
+        return self.__job_queue_dispatcher.add_job_to_queue(job)
 
-    def get_queue(self): return self.__job_queue_dispatcher.get_all_jobs()
+    def get_queue(self):
+        return self.__job_queue_dispatcher.get_all_jobs()
 
     def run(self):
         if self.__is_running:

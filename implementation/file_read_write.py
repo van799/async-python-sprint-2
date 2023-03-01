@@ -1,4 +1,3 @@
-import os.path
 from pathlib import Path
 
 from core.read_write_base import ReaderWriterBase
@@ -6,6 +5,7 @@ from core.read_write_base import ReaderWriterBase
 
 class FileReadWrite(ReaderWriterBase):
     """Класс отвечает за создание, чтение, и записи не выполненных TASK"""
+
     def __init__(self, file_name):
         super().__init__()
         self.__file_name = file_name

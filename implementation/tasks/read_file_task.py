@@ -1,9 +1,12 @@
-from time import sleep
-
 from core.task_base import TaskBase
+from scheduler_config import get_logger
+
+logger = get_logger()
 
 
-class CreateFileTask(TaskBase):
+class ReadFileTask(TaskBase):
+    """Класс чтения из файла."""
+
     def __init__(self, param=None):
         super().__init__(param)
 
@@ -11,7 +14,11 @@ class CreateFileTask(TaskBase):
     def name(self):
         return 'create file'
 
-    def execute(self):
-        with open(f'{self.param}.txt',) as f:
-            lines = f.readlines()
-        print(f'read file: {lines}')
+    def execute(self) -> None:
+        try:
+            with open(f'{self.param}.txt', ) as f:
+                lines = f.readlines()
+            print(f'read file: {lines}')
+            logger.info('Finished reading file.')
+        except EnvironmentError as error:
+            logger.error(error)

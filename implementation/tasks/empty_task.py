@@ -1,15 +1,19 @@
-from time import sleep
-
 from core.task_base import TaskBase
+from scheduler_config import get_logger
+
+logger = get_logger()
 
 
 class EmptyTask(TaskBase):
+    """Пустой тестовый класс"""
+
     def __init__(self, param=None):
         super().__init__(param)
 
     @property
     def name(self):
-        return 'empty_task'
+        return 'empty task'
 
-    def execute(self):
-        print('hello world')
+    def execute(self) -> None:
+        print('Finished test TASK.')
+        logger.info('Finished test TASK.')

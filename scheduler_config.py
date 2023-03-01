@@ -6,7 +6,7 @@ def get_logger() -> logging.Logger:
     """Настройки логгера для проекта."""
 
     logging.basicConfig(
-        filename='jobs.log',
+        filename='logging.log',
         filemode='w',
         level=logging.INFO,
         format='%(name)s - %(levelname)s - %(message)s',

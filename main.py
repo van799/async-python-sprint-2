@@ -8,9 +8,6 @@ from implementation.tasks.create_dir_task import CreateDirTask
 from implementation.tasks.delete_file_task import DeleteFileTask
 from implementation.tasks.get_weather_task import GetWeatherTask
 
-
-
-
 from implementation.queue_processor import QueueProcessor
 from implementation.file_read_write import FileReadWrite
 from implementation.job_json_repository import JobJsonRepository
@@ -28,10 +25,10 @@ task_factory = TaskFactory()
 # c нужным класом
 task_factory.register_task(name_task='get weather',
                            create_task=lambda p: GetWeatherTask(p))
-# task_factory.register_task(name_task='delete file',
-#                            create_task=lambda p: DeleteFileTask(p))
-# task_factory.register_task(name_task='create_dir',
-#                            create_task=lambda p: CreateDirTask(p))
+task_factory.register_task(name_task='delete file',
+                           create_task=lambda p: DeleteFileTask(p))
+task_factory.register_task(name_task='create dir',
+                           create_task=lambda p: CreateDirTask(p))
 
 repository = JobJsonRepository(read_writer, task_factory)
 saved_job_count = len(repository.get_jobs())
@@ -48,9 +45,10 @@ if not os.path.exists(config.filename) or saved_job_count <= 0:
     # scheduler.schedule(job_create_file)
     # scheduler.schedule(job_delete_file)
 
-    scheduler.schedule(task=GetWeatherTask('data/create_file/create_file_weather.txt'), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=CreateFileTask('data/create_file.txt'), max_working_time=-1, tries=0)
-    # scheduler.schedule(task=CreateDirTask('create_dir'), max_working_time=-1, tries=0)
+    scheduler.schedule(task=CreateDirTask('data/create_dir'), max_working_time=-1, tries=0)
+    scheduler.schedule(task=CreateFileTask('data/create_dir/create_file_weather.txt'), max_working_time=-1, tries=0)
+    scheduler.schedule(task=GetWeatherTask('data/create_dir/create_file_weather.txt'), max_working_time=-1, tries=0)
+
 
     # scheduler.schedule(task=EmptyTask('name_file'), max_working_time=-1, tries=0)  # 1
     # scheduler.schedule(task=EmptyTask(), max_working_time=-1, tries=0)
