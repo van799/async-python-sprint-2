@@ -36,7 +36,7 @@ class QueueProcessor(QueueProcessorBase):
                 jobs_count += 1
                 job.run(datetime.now())
 
-                if job.done_with_error:
+                if job.error_message not in (None, ''):
                     logger.log_error(
                         f'Job "{job.task_name}", param: "{job.task_param}" finished with error. Error message: "{job.error_message}"',
                         'JobQueueProcessor.__process_queue')
