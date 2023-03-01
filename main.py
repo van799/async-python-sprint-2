@@ -18,7 +18,7 @@ from scheduler_config import SchedulerConfig
 from implementation.logger import Logger
 
 config = SchedulerConfig.GetConfig()
-logger = Logger('logger.log', 'w', logging.DEBUG)
+logger = Logger('data/logger.log', 'w', logging.DEBUG)
 
 read_writer = FileReadWrite(config.filename)
 task_factory = TaskFactory()
@@ -38,21 +38,22 @@ saved_job_count = len(repository.get_jobs())
 scheduler = Scheduler(logger, QueueProcessor(logger, JobQueueDispatcher([])), repository, pool_size=config.pool_size)
 
 if not os.path.exists(config.filename) or saved_job_count <= 0:
-    # job_create_dir = Job(CreateDirTask('data/create_file'))
-    #
-    # job_create_file = Job(CreateFileTask('data/create_file/create_file.txt'),
-    #                       dependencies=[job_create_dir.job_id])
-    # job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'), dependencies=[job_create_file.job_id])
-    #
-    # scheduler.schedule(job_create_dir)
-    # scheduler.schedule(job_create_file)
-    # scheduler.schedule(job_delete_file)
+    
+    job_create_dir = Job(CreateDirTask('data/create_dir'))
+    
+    job_create_file = Job(CreateFileTask('data/create_dir/create_file.txt'),
+                          dependencies=[job_create_dir.job_id])
+    job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'), dependencies=[job_create_file.job_id])
+    
+    scheduler.schedule(job_create_dir)
+    scheduler.schedule(job_create_file)
+    scheduler.schedule(job_delete_file)
 
-    scheduler.schedule(Job(task=CreateDirTask('data/create_dir'), max_working_time=-1, tries=0))
-    scheduler.schedule(Job(task=CreateFileTask('data/create_dir/create_file_weather.txt'), max_working_time=-1,
-                           tries=0))
-    scheduler.schedule(Job(task=GetWeatherTask('data/create_dir/create_file_weather.txt'), max_working_time=-1,
-                           tries=0))
+    # scheduler.schedule(Job(task=CreateDirTask('data/create_dir'), max_working_time=-1, tries=0))
+    # scheduler.schedule(Job(task=CreateFileTask('data/create_dir/create_file_weather.txt'), max_working_time=-1,
+    #                        tries=0))
+    # scheduler.schedule(Job(task=GetWeatherTask('data/create_dir/create_file_weather.txt'), max_working_time=-1,
+    #                        tries=0))
 
 scheduler.run()
 time.sleep(10)
