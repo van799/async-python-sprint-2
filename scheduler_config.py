@@ -9,7 +9,7 @@ def get_logger() -> logging.Logger:
         filename='logging.log',
         filemode='w',
         level=logging.INFO,
-        format='%(name)s - %(levelname)s - %(message)s',
+        format='%(asctime)s - %(levelname)s - %(name)s - %(message)s',
     )
     return logging.getLogger('scheduler')
 
