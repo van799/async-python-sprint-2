@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from core.read_write_base import ReaderWriterBase
 
 
@@ -12,7 +11,8 @@ class FileReadWrite(ReaderWriterBase):
 
     def read_or_create(self):
         filename = Path(self.__file_name)
-        filename.touch(exist_ok=True)  # will create file, if it exists will do nothing
+        # will create file, if it exists will do nothing
+        filename.touch(exist_ok=True)
         with open(self.__file_name, 'r') as user_file:
             file_contents = user_file.read()
             return file_contents

@@ -8,9 +8,5 @@ class DeleteFileTask(TaskBase):
     def __init__(self, param: str):
         super().__init__(param)
 
-    @property
-    def name(self):
-        return 'delete file'
-
     def execute(self) -> None:
         os.remove(self.param)

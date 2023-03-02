@@ -9,10 +9,6 @@ class GetWeatherTask(TaskBase):
     def __init__(self, param: str):
         super().__init__(param)
 
-    @property
-    def name(self):
-        return 'get weather'
-
     def execute(self) -> None:
         weather_dict = {}
         forecasts = Forecast.parse_obj(YandexWeatherAPI().get_forecasting())

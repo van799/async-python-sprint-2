@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
 
-class JobRepositoryBase(ABC):
+class RepositoryBase(ABC):
     @abstractmethod
-    def get_jobs(self):
+    def get(self):
         pass
 
     @abstractmethod
-    def save_jobs(self, jobs):
+    def save(self, jobs):
         pass

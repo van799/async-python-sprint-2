@@ -1,4 +1,4 @@
-from core.job import Job
+from job import Job
 from tests.common.test_empty_task import TestEmptyTask
 
 
@@ -7,4 +7,5 @@ class TestJobAlwaysComplete(Job):
         super().__init__(task=TestEmptyTask())
 
     @property
-    def done(self): return True
+    def done(self): 
+        return True

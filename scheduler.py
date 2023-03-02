@@ -43,7 +43,7 @@ class Scheduler:
         if self.__job_repository is None:
             self.__logger.log_debug('Job repository is empty', 'Scheduler.__load_jobs')
             return []
-        return self.__job_repository.get_jobs()
+        return self.__job_repository.get()
 
     def __save_jobs(self):
         """Метод сохранения не выполненных задач."""
@@ -54,7 +54,7 @@ class Scheduler:
             filter(
                 lambda o: o.done is False or o.done_with_error is True, self.__queue_processor.get_queue())
         )
-        self.__job_repository.save_jobs(jobs_to_save)
+        self.__job_repository.save(jobs_to_save)
 
     def stop(self):
         """Метод остановки задач."""

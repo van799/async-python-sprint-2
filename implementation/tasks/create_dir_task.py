@@ -8,10 +8,6 @@ class CreateDirTask(TaskBase):
     def __init__(self, param: str):
         super().__init__(param)
 
-    @property
-    def name(self):
-        return 'create dir'
-
     def execute(self) -> None:
         os.mkdir(self.param)
         print(f'Create dir  {self.param}')

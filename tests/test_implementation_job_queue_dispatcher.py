@@ -1,6 +1,5 @@
 import unittest
-
-from core.job import Job
+from job import Job
 from implementation.job_queue_dispatcher import JobQueueDispatcher
 from tests.common.test_empty_task import TestEmptyTask
 from tests.common.test_empty_task_always_complete import TestEmptyTaskAlwaysComplete
@@ -9,7 +8,6 @@ from tests.common.test_Job_always_complete import TestJobAlwaysComplete
 
 
 class JobQueueDispatcherTest(unittest.TestCase):
-
     def test_job_queue_dispatcher_returns_job_when_dependencies_complete(self):
         job_1 = TestJobAlwaysComplete()
         job_2 = TestJobAlwaysComplete()
@@ -27,7 +25,7 @@ class JobQueueDispatcherTest(unittest.TestCase):
         job_queue_dispatcher = JobQueueDispatcher(queue)
         jobs_to_run = job_queue_dispatcher.get_jobs_to_run()
         job_to_run = next(filter(lambda o: o.job_id
-                                           == job.job_id, jobs_to_run), None)
+                                 == job.job_id, jobs_to_run), None)
 
         self.assertIsNotNone(job_to_run)
 
@@ -51,7 +49,7 @@ class JobQueueDispatcherTest(unittest.TestCase):
         job_queue_dispatcher = JobQueueDispatcher(queue)
         jobs_to_run = job_queue_dispatcher.get_jobs_to_run()
         job_to_run = next(filter(lambda o: o.job_id
-                                           == job.job_id, jobs_to_run), None)
+                                 == job.job_id, jobs_to_run), None)
 
         self.assertIsNone(job_to_run)
 

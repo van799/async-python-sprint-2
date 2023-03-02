@@ -5,9 +5,11 @@ class TaskFactory:
         self.__creators = creators
 
     """Метод для предварительной регистрации TASK"""
-    def register_task(self, task_cls:type):
-        self.__creators[task_cls.__name__] = lambda p:  TaskFactory.__get_object(task_cls, p)
-    
+
+    def register_task(self, task_cls: type):
+        self.__creators[task_cls.__name__] = lambda p: TaskFactory.__get_object(
+            task_cls, p)
+
     @staticmethod
     def __get_object(task_cls, p):
         o = object.__new__(task_cls, p)

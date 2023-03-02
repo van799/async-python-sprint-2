@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from core.job_descriptor import JobDescriptor
+from implementation.job_descriptor import JobDescriptor
 
 
 class Job:

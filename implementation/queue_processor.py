@@ -1,10 +1,9 @@
+import time
 import threading
 from datetime import datetime
 from threading import Event
-from implementation.job_queue_dispatcher import JobQueueDispatcher
-
 from core.queue_processor_base import QueueProcessorBase
-import time
+from implementation.job_queue_dispatcher import JobQueueDispatcher
 
 
 class QueueProcessor(QueueProcessorBase):
@@ -76,7 +75,8 @@ class QueueProcessor(QueueProcessorBase):
     def run(self) -> None:
         """Метод запускает Job в потоке"""
         if self.__is_running:
-            self.__logger.log_debug('Queue processor is running', 'QueueProcessor.run')
+            self.__logger.log_debug(
+                'Queue processor is running', 'QueueProcessor.run')
             return
 
         self.__event = Event()

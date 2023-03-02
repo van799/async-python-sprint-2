@@ -7,10 +7,6 @@ class CreateFileTask(TaskBase):
     def __init__(self, param: str) -> None:
         super().__init__(param)
 
-    @property
-    def name(self):
-        return 'create file'
-
     def execute(self) -> None:
         with open(f'{self.param}', 'w') as f:
             f.write(f'{self.param}')

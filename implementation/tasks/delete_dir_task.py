@@ -8,10 +8,6 @@ class DeleteDirTask(TaskBase):
     def __init__(self, param: str):
         super().__init__(param)
 
-    @property
-    def name(self):
-        return 'delete dir'
-
     def execute(self) -> None:
         os.rmdir(self.param)
         print(f'Delete dir  {self.param}')

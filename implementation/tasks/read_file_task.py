@@ -7,10 +7,6 @@ class ReadFileTask(TaskBase):
     def __init__(self, param: str):
         super().__init__(param)
 
-    @property
-    def name(self):
-        return 'create file'
-
     def execute(self) -> None:
         with open(f'{self.param}.txt', ) as f:
             lines = f.readlines()

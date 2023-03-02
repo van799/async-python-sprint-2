@@ -1,14 +1,16 @@
-from core.job_repository_base import JobRepositoryBase
+from core.repository_base import RepositoryBase
 
 
-class TestJobRepository(JobRepositoryBase):
+class TestJobRepository(RepositoryBase):
     def __init__(self, items=[]):
         super().__init__()
         self.__items = []
         self.__items.extend(items)
 
-    def get_jobs(self):
+    def get(self):
         return self.__items
 
-    def save_jobs(self, jobs):
+    def save(self, jobs):
         self.__items.extend(jobs)
+
+

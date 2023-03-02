@@ -11,15 +11,6 @@ class TaskBase(ABC):
     def param(self):
         return self.__param
 
-    @property
-    def complete(self):
-        return self.__complete
-
-    @property
-    @abstractmethod
-    def name(self):
-        pass
-
     @abstractmethod
     def execute(self):
         pass

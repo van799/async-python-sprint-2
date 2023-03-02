@@ -2,11 +2,9 @@ import datetime
 import unittest
 import json
 import uuid
-
-from core.job import Job
+from job import Job
 from implementation.job_json_repository import JobJsonRepository
 from implementation.task_factory import TaskFactory
-
 from tests.common.test_empty_task import TestEmptyTask
 from tests.common.test_read_writer import TestReadWrite
 
@@ -14,9 +12,7 @@ from tests.common.test_read_writer import TestReadWrite
 class TestJobJsonRepository(unittest.TestCase):
     def setUp(self):
         self.task_factory = TaskFactory()
-
-        self.task_factory.register_task(
-            name_task='test_empty_task', create_task=lambda p: TestEmptyTask(p))
+        self.task_factory.register_task(TestEmptyTask)
 
     def test_get_job_return_saved_jobs(self):
         test_job_id = '_job_uuid_'
@@ -33,7 +29,7 @@ class TestJobJsonRepository(unittest.TestCase):
                                )
         job_json_repository = JobJsonRepository(reader_writer=TestReadWrite(json_jobs),
                                                 task_factory=self.task_factory)
-        saved_jobs = job_json_repository.get_jobs()
+        saved_jobs = job_json_repository.get()
         saved_job = next(filter(lambda o: o.job_id
                          == test_job_id, saved_jobs), None)
 
@@ -55,7 +51,7 @@ class TestJobJsonRepository(unittest.TestCase):
                                )
         job_json_repository = JobJsonRepository(reader_writer=TestReadWrite(json_jobs),
                                                 task_factory=self.task_factory)
-        saved_jobs = job_json_repository.get_jobs()
+        saved_jobs = job_json_repository.get()
 
         found = any(
             x.job_id == job_descriptor.job_id and x.task_param == task_param for x in saved_jobs)

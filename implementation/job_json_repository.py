@@ -1,12 +1,11 @@
-from datetime import datetime
-from core.job_descriptor import JobDescriptor
-from core.job_repository_base import JobRepositoryBase
-
 import json
-from core.job import Job
+from job import Job
+from datetime import datetime
+from core.repository_base import RepositoryBase
+from implementation.job_descriptor import JobDescriptor
 
 
-class JobJsonRepository(JobRepositoryBase):
+class JobJsonRepository(RepositoryBase):
     """Класс нужен для создания класса Job при считывании не выполненных TASK из файла."""
 
     def __init__(self, reader_writer, task_factory):
@@ -34,7 +33,7 @@ class JobJsonRepository(JobRepositoryBase):
 
         return job_descriptor
 
-    def get_jobs(self):
+    def get(self):
         """Метод получение описание Job из словаря."""
         jobs = []
         data = self.__reader_writer.read_or_create()
@@ -56,7 +55,7 @@ class JobJsonRepository(JobRepositoryBase):
             return o.isoformat()
         return o.__dict__
 
-    def save_jobs(self, jobs):
+    def save(self, jobs):
         """Метод сохраняет Jobs в репозитарий"""
         job_descriptors = []
         for job in jobs:
