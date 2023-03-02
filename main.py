@@ -26,12 +26,10 @@ task_factory = TaskFactory()
 # task factory нужен для создания класса такса при считывании тасок из файла.
 # пример: мы считываем название таски из файла но как он создаст клас таски? а так что таска зарегистрирована
 # c нужным класом
-task_factory.register_task(name_task='get weather',
-                           create_task=lambda p: GetWeatherTask(p))
-task_factory.register_task(name_task='delete file',
-                           create_task=lambda p: DeleteFileTask(p))
-task_factory.register_task(name_task='create dir',
-                           create_task=lambda p: CreateDirTask(p))
+
+task_factory.register_task(GetWeatherTask)
+task_factory.register_task(DeleteFileTask)
+task_factory.register_task(CreateDirTask)
 
 repository = JobJsonRepository(read_writer, task_factory)
 saved_job_count = len(repository.get_jobs())

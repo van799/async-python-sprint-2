@@ -6,9 +6,15 @@ class TaskFactory:
     def __init__(self, creators={}):
         self.__creators = creators
 
-    def register_task(self, name_task, create_task):
-        """Метод для предварительной регистрации TASK"""
-        self.__creators[name_task] = create_task
+    """Метод для предварительной регистрации TASK"""
+    def register_task(self, task_cls:type):
+        self.__creators[task_cls.__name__] = lambda p:  TaskFactory.__get_object(task_cls, p)
+    
+    @staticmethod
+    def __get_object(task_cls, p):
+        o = object.__new__(task_cls, p)
+        o.__init__(p)
+        return o
 
     def get_task_creator(self, name_task):
         """Метод получение TASK"""
