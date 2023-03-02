@@ -74,7 +74,7 @@ class Job:
 
     @property
     def task_name(self):
-        return self.__task.name
+        return type(self.__task).__name__
 
     @property
     def task_param(self):
