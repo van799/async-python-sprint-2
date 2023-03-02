@@ -14,4 +14,3 @@ class DeleteFileTask(TaskBase):
 
     def execute(self) -> None:
         os.remove(self.param)
-

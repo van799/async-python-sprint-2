@@ -1,5 +1,4 @@
 import unittest
-from datetime import datetime
 
 from core.job import Job
 from implementation.job_queue_dispatcher import JobQueueDispatcher

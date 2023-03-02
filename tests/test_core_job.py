@@ -2,10 +2,7 @@ import unittest
 from datetime import datetime
 
 from core.job import Job
-from implementation.job_queue_dispatcher import JobQueueDispatcher
 from tests.common.test_empty_task import TestEmptyTask
-from tests.common.test_empty_task_always_complete import TestEmptyTaskAlwaysComplete
-from tests.common.test_empty_task_always_not_complete import TestEmptyTaskAlwaysNotComplete
 
 
 class JobTest(unittest.TestCase):

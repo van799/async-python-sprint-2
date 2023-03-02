@@ -1,13 +1,11 @@
-import time
 import uuid
 from datetime import datetime
-# from core.job_base import JobBase
 from core.job_descriptor import JobDescriptor
-from core.task_base import TaskBase
 
 
 class Job:
     """Класс описывающий задачу планировщика и её методы."""
+
     def __init__(self,
                  task,
                  job_id='',
@@ -33,20 +31,20 @@ class Job:
         self.__error_message = error_message
         self.__job_id = job_id
 
-        if (self.__job_id in (None, '')):
+        if self.__job_id in (None, ''):
             self.__job_id = str(uuid.uuid1())
 
     def __ready_to_execute(self, time_now):
-        if self.__co_execute != None:
+        if self.__co_execute is not None:
             return False
-        if self.__start_at != None and self.__start_at >= time_now:
+        if self.__start_at is not None and self.__start_at >= time_now:
             return False
-        if self.__tries_count > self.__tries and self.__tries > 0:
+        if self.__tries_count > self.__tries > 0:
             return False
         return True
 
     def run(self, time_now):
-        if self.__coroutine == None:
+        if self.__coroutine is None:
             self.__coroutine = self.do_job(time_now)
             next(self.__coroutine)
             return
@@ -56,7 +54,7 @@ class Job:
         """Корутина для запуска задач на исполнение."""
         current_time = time_now
         while True:
-            if self.__ready_to_execute(current_time) == True:
+            if self.__ready_to_execute(current_time) is True:
                 if self.__tries_count <= self.__tries:
                     self.__tries_count += 1
                     try:
@@ -64,13 +62,11 @@ class Job:
                         self.__task.do_task()
                         self.__done = True
                     except Exception as e:
-                        #self.__done_with_error = True
                         self.__error_message = f"Unexpected exception: {e}"
                 else:
                     self.__done_with_error = True
                     self.__error_message = 'Attempts count is excided'
-                       
-            current_time = (yield)
+            current_time = yield
 
     @property
     def job_id(self):

@@ -2,9 +2,10 @@ from core.queue_processor_base import QueueProcessorBase
 
 
 class TestQueueProcessor(QueueProcessorBase):
-    
+
     def __init__(self, job_queue_dispatcher):
         self.__job_queue_dispatcher = job_queue_dispatcher
+
     @property
     def is_running(self):
         return

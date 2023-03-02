@@ -16,7 +16,9 @@ from implementation.job_queue_dispatcher import JobQueueDispatcher
 from scheduler_config import SchedulerConfig
 from implementation.logger import Logger
 
-# Привет, Николай Зимин. Проект решил полностью передать с использованием классов и использованию различных паттернов проектирования
+# Привет, Николай Зимин. Проект решил полностью
+# передать с использованием классов и использованию
+# различных паттернов проектирования
 
 
 # конфигурирование Scheduler

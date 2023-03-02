@@ -1,12 +1,3 @@
-import threading
-from datetime import datetime
-from threading import Event
-from time import sleep
-
-from core.job import Job
-from core.job_repository_base import JobRepositoryBase
-
-
 class Scheduler:
     """Класс описывающий планировщик задач и его методы."""
 
@@ -17,24 +8,19 @@ class Scheduler:
         self.__job_repository = job_repository
         self.__queue_processor = queue_processor
 
-    def schedule(self,
-                 job,
-                 start_at=None,
-                 max_working_time=-1,
-                 tries=0,
-                 dependencies=[]
-                 ):
+    def schedule(self, job):
         """Постановка задач в очередь. Сперва проверяются есть ли запущенные задачи,
         если есть выполнение задач останавливается. В очередь можно добавить любое
         количество задач, но за один запуск планировщика будет обработано только
         то количество задач, которое соответствует pool_size планировщика. """
-        self.__logger.log_info(f'Schedule job: "{job.task_name}". Param: "{job.task_param}"')
+        self.__logger.log_info(f'Schedule job: "{job.task_name}".'
+                               f' Param: "{job.task_param}"')
         was_running = self.__is_running
         if self.__is_running:
             self.stop(save=False)
 
         self.__queue_processor.add_job_to_queue(job)
-        if was_running == True:
+        if was_running is True:
             self.run()
 
     def run(self):
@@ -45,28 +31,29 @@ class Scheduler:
         loaded_jobs = self.__load_jobs()
         self.__queue_processor.add_jobs_to_queue(loaded_jobs)
         self.__queue_processor.run()
-        self.__logger.log_info(f'Scheduler started')
+        self.__logger.log_info('Scheduler started')
 
     def restart(self):
         """Метод перезапуска задач."""
         self.__queue_processor.stop()
         self.__queue_processor.run()
-        self.__logger.log_info(f'Scheduler restart')
+        self.__logger.log_info('Scheduler restart')
 
     def __load_jobs(self):
-        if self.__job_repository == None:
+        if self.__job_repository is None:
             self.__logger.log_debug('Job repository is empty', 'Scheduler.__load_jobs')
             return []
         return self.__job_repository.get_jobs()
 
     def __save_jobs(self):
         """Метод сохранения не выполненных задач."""
-        if self.__job_repository == None:
+        if self.__job_repository is None:
             self.__logger.log_debug('No Jobs to save', 'Scheduler.__save_jobs')
             return
         jobs_to_save = list(
-            filter(lambda o: o.done == False or o.done_with_error == True, self.__queue_processor.get_queue()))
-
+            filter(
+                lambda o: o.done is False or o.done_with_error is True, self.__queue_processor.get_queue())
+        )
         self.__job_repository.save_jobs(jobs_to_save)
 
     def stop(self):

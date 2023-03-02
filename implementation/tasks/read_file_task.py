@@ -15,4 +15,3 @@ class ReadFileTask(TaskBase):
         with open(f'{self.param}.txt', ) as f:
             lines = f.readlines()
         print(f'read file: {lines}')
-

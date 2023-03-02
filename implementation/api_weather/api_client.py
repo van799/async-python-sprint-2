@@ -26,8 +26,7 @@ class YandexWeatherAPI:
                     )
                 )
             return resp
-        except Exception as ex:
-            pass
+        except Exception:
             raise Exception(ERR_MESSAGE_TEMPLATE)
 
     def get_forecasting(self):

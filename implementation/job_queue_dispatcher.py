@@ -21,8 +21,10 @@ class JobQueueDispatcher:
         """Метод проверяет Job dependencies"""
         for dependence_job_id in job.dependencies:
             job = next(filter(lambda o: o.job_id == dependence_job_id, self.__queue), None)
-            if job is None: continue
-            if not job.done: return False
+            if job is None:
+                continue
+            if not job.done:
+                return False
         return True
 
     def add_jobs_to_queue(self, jobs) -> None:

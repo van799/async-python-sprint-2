@@ -1,7 +1,6 @@
 import unittest
 
 from implementation.task_factory import TaskFactory
-from core.job import Job
 
 
 class TestTaskFactory(unittest.TestCase):

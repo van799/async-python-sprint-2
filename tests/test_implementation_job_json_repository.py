@@ -4,7 +4,6 @@ import json
 import uuid
 
 from core.job import Job
-from core.read_write_base import ReaderWriterBase
 from implementation.job_json_repository import JobJsonRepository
 from implementation.task_factory import TaskFactory
 

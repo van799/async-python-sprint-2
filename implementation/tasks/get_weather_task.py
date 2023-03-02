@@ -23,4 +23,3 @@ class GetWeatherTask(TaskBase):
         with open(self.param, 'w') as f:
             f.write(f'{weather_dict}')
         print(f'Create file with weather: {self.param}')
-
