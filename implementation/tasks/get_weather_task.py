@@ -6,7 +6,7 @@ from implementation.api_weather.data_classes import Forecast
 class GetWeatherTask(TaskBase):
     """Класс получения прогноза погоды по Москвe."""
 
-    def __init__(self, param=None):
+    def __init__(self, param: str):
         super().__init__(param)
 
     @property

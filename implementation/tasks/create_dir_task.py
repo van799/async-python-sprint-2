@@ -5,7 +5,7 @@ from core.task_base import TaskBase
 class CreateDirTask(TaskBase):
     """Класс создания директории."""
 
-    def __init__(self, param=None):
+    def __init__(self, param: str):
         super().__init__(param)
 
     @property

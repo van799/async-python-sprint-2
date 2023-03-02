@@ -4,7 +4,7 @@ from core.logger_base import LoggerBase
 
 
 class Logger(LoggerBase):
-    def __init__(self, filename, filemode, level):
+    def __init__(self, filename: str, filemode: str, level):
         logging.basicConfig(
             filename=filename,
             filemode=filemode,
@@ -13,16 +13,16 @@ class Logger(LoggerBase):
         )
         self.__logger = logging.getLogger('scheduler')
 
-    def log_info(self, message):
+    def log_info(self, message: str):
         self.__logger.info(message)
 
-    def log_debug(self, message, source=''):
+    def log_debug(self, message: str, source: str = ''):
         if source == '':
             self.__logger.debug(message)
             return
         self.__logger.debug(f'Source: "{source}", Message: "{message}"')
 
-    def log_error(self, message, source):
+    def log_error(self, message: str, source: str):
         if source == '':
             self.__logger.error(message)
             return

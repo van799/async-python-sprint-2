@@ -9,6 +9,7 @@ from core.queue_processor_base import QueueProcessorBase
 
 class QueueProcessor(QueueProcessorBase):
     """Класс отвечает за обработку Jobs"""
+
     def __init__(self, logger, job_queue_dispatcher: JobQueueDispatcher, pool_size=10):
         self.__logger = logger
         self.__pool_size = pool_size
@@ -16,11 +17,11 @@ class QueueProcessor(QueueProcessorBase):
         self.__job_queue_dispatcher = job_queue_dispatcher
 
     @property
-    def is_running(self):
+    def is_running(self) -> None:
         return self.__is_running
 
     @staticmethod
-    def __process_queue(logger, event, job_queue_dispatcher, pool_size):
+    def __process_queue(logger, event, job_queue_dispatcher, pool_size) -> None:
         """Метод для обработки очереди и запуска задач."""
         while True:
             jobs_count = 0
@@ -49,19 +50,19 @@ class QueueProcessor(QueueProcessorBase):
                                  'JobQueueProcessor.__process_queue')
                 break
 
-    def add_jobs_to_queue(self, jobs):
+    def add_jobs_to_queue(self, jobs) -> None:
         """Метод вызывает метод job_queue_dispatcher для добавления jobs в очередь"""
         return self.__job_queue_dispatcher.add_jobs_to_queue(jobs)
 
-    def add_job_to_queue(self, job):
+    def add_job_to_queue(self, job) -> None:
         """Метод вызывает метод job_queue_dispatcher для добавления job в очередь"""
         return self.__job_queue_dispatcher.add_job_to_queue(job)
 
-    def get_queue(self):
+    def get_queue(self) -> None:
         """Метод получает job из очереди"""
         return self.__job_queue_dispatcher.get_all_jobs()
 
-    def run(self):
+    def run(self) -> None:
         """Метод запускает Job в потоке"""
         if self.__is_running:
             self.__logger.log_debug(f'Queue processor is running', 'QueueProcessor.run')
@@ -76,7 +77,7 @@ class QueueProcessor(QueueProcessorBase):
         self.__is_running = True
         self.__logger.log_info(f'Queue processor is started')
 
-    def stop(self):
+    def stop(self) -> None:
         """Метод останавливает Job"""
         if not self.__is_running:
             self.__logger.log_debug(f'Queue processor is not running', 'QueueProcessor.stop')

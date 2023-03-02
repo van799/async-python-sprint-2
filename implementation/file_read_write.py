@@ -6,7 +6,7 @@ from core.read_write_base import ReaderWriterBase
 class FileReadWrite(ReaderWriterBase):
     """Класс отвечает за создание, чтение, и записи не выполненных TASK"""
 
-    def __init__(self, file_name):
+    def __init__(self, file_name: str) -> None:
         super().__init__()
         self.__file_name = file_name
 

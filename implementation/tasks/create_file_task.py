@@ -4,7 +4,7 @@ from core.task_base import TaskBase
 class CreateFileTask(TaskBase):
     """Класс для создания файла."""
 
-    def __init__(self, param=None):
+    def __init__(self, param: str) -> None:
         super().__init__(param)
 
     @property
