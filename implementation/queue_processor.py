@@ -101,4 +101,4 @@ class QueueProcessor(QueueProcessorBase):
         self.__event.set()
         self.__thread.join()
         self.__is_running = False
-        self.__logger.log_info(f'Queue processor is stopped')
+        self.__logger.log_info('Queue processor is stopped')
