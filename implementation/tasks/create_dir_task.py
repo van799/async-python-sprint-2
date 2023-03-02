@@ -13,6 +13,5 @@ class CreateDirTask(TaskBase):
         return 'create dir'
 
     def execute(self) -> None:
-        if not os.path.isdir(self.param):
-            os.mkdir(self.param)
-            print(f'Create dir  {self.param}')
+        os.mkdir(self.param)
+        print(f'Create dir  {self.param}')

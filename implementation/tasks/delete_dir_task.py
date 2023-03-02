@@ -13,6 +13,5 @@ class DeleteDirTask(TaskBase):
         return 'delete dir'
 
     def execute(self) -> None:
-        if os.path.is_dir(self.param):
-            os.rmdir(self.param)
-            print(f'Delete dir  {self.param}')
+        os.rmdir(self.param)
+        print(f'Delete dir  {self.param}')

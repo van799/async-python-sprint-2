@@ -39,11 +39,12 @@ scheduler = Scheduler(logger, QueueProcessor(logger, JobQueueDispatcher([])), re
 
 if not os.path.exists(config.filename) or saved_job_count <= 0:
     #     Запуск TASK в dependencies
-    job_create_dir = Job(CreateDirTask('data/create_dir'))
+    job_create_dir = Job(CreateDirTask('data/create_dir'), tries=5)
 
     job_create_file = Job(CreateFileTask('data/create_dir/create_file.txt'),
-                          dependencies=[job_create_dir.job_id])
-    job_delete_file = Job(DeleteFileTask('data/create_file2/create_file.txt'), dependencies=[job_create_file.job_id])
+                          dependencies=[job_create_dir.job_id], tries=5)
+    job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'), dependencies=[job_create_file.job_id],
+                          tries=5)
 
     scheduler.schedule(job_create_dir)
     scheduler.schedule(job_create_file)

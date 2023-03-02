@@ -13,6 +13,5 @@ class DeleteFileTask(TaskBase):
         return 'delete file'
 
     def execute(self) -> None:
-        if os.path.isfile(self.param):
-            os.remove(self.param)
+        os.remove(self.param)
 
