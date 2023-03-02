@@ -4,6 +4,7 @@ from threading import Event
 from implementation.job_queue_dispatcher import JobQueueDispatcher
 
 from core.queue_processor_base import QueueProcessorBase
+import time
 
 
 class QueueProcessor(QueueProcessorBase):
@@ -58,6 +59,7 @@ class QueueProcessor(QueueProcessorBase):
                     'JobQueueProcessor.__process_queue'
                 )
                 break
+            time.sleep(1)
 
     def add_jobs_to_queue(self, jobs) -> None:
         """Метод вызывает метод job_queue_dispatcher для добавления jobs в очередь"""
