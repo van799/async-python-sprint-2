@@ -1,6 +1,5 @@
 import logging
 import time
-import os.path
 from datetime import datetime, timedelta
 from job import Job
 from scheduler import Scheduler
@@ -28,11 +27,14 @@ from implementation.tasks.empty_task import EmptyTask
 config = SchedulerConfig.GetConfig()
 logger = Logger(config.log_filename, 'w', logging.INFO)
 
-#     """Класс нужен для создания класса такса при считывании не выполненных TASK из файла."""
+# """Класс нужен для создания класса такса при считывании
+# не выполненных TASK из файла.
+# """
 task_factory = TaskFactory()
 
 # task factory нужен для создания класса такса при считывании тасок из файла.
-# пример: мы считываем название таски из файла но как он создаст клас таски? а так что таска зарегистрирована
+# пример: мы считываем название таски из файла но как он создаст клас таски?
+# а так что таска зарегистрирована
 # c нужным класом
 task_factory.register_task(EmptyTask)
 task_factory.register_task(CreateDirTask)
@@ -44,28 +46,45 @@ task_factory.register_task(GetWeatherTask)
 
 # Планируем выполнение тасок
 repository = JobJsonRepository(FileReadWrite(config.filename), task_factory)
-job_create_dir = Job(CreateDirTask('data/create_file'))
-job_create_file = Job(CreateFileTask('data/create_file/create_file.txt'),
-                dependencies=[job_create_dir.job_id], tries=5)
-job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'),
-                dependencies=[job_create_file.job_id])
-job_delete_dir = Job(DeleteDirTask('data/create_file'),
-                dependencies=[job_delete_file.job_id])
-job_create_weather_dir = Job(CreateDirTask('data/weather'))
-job_create_weather_file = Job(CreateFileTask('data/weather/weather_forecast.txt'),
-                dependencies=[job_create_weather_dir.job_id])
-job_get_weather = Job(GetWeatherTask('data/weather/weather_forecast.txt'),
-                dependencies=[job_create_weather_file.job_id])
-job_read_weather_from_file = Job(task=ReadFileTask('data/weather/weather_forecast.txt'),
-                dependencies=[job_get_weather.job_id])
-job_delete_weather_file = Job(DeleteFileTask('data/weather/weather_forecast.txt'),
-                dependencies=[job_read_weather_from_file.job_id])
-job_delete_weather_dir = Job(DeleteDirTask('data/weather'),
-                dependencies=[job_delete_weather_file.job_id])
-job_try_to_delete_weather_dir_again = Job(DeleteDirTask('data/weather'),
-                dependencies=[job_delete_weather_dir.job_id])
+job_create_dir = Job(
+    CreateDirTask('data/create_file'))
+job_create_file = Job(
+    CreateFileTask(
+        'data/create_file/create_file.txt'),
+    dependencies=[job_create_dir.job_id], tries=5)
+job_delete_file = Job(
+    DeleteFileTask(
+        'data/create_file/create_file.txt'),
+    dependencies=[job_create_file.job_id])
+job_delete_dir = Job(
+    DeleteDirTask('data/create_file'),
+    dependencies=[job_delete_file.job_id])
+job_create_weather_dir = Job(
+    CreateDirTask('data/weather'))
+job_create_weather_file = Job(
+    CreateFileTask(
+        'data/weather/weather_forecast.txt'),
+    dependencies=[job_create_weather_dir.job_id])
+job_get_weather = Job(
+    GetWeatherTask(
+        'data/weather/weather_forecast.txt'),
+    dependencies=[job_create_weather_file.job_id])
+job_read_weather_from_file = Job(
+    ReadFileTask(
+        'data/weather/weather_forecast.txt'),
+    dependencies=[job_get_weather.job_id])
+job_delete_weather_file = Job(
+    DeleteFileTask(
+        'data/weather/weather_forecast.txt'),
+    dependencies=[job_read_weather_from_file.job_id])
+job_delete_weather_dir = Job(
+    DeleteDirTask('data/weather'),
+    dependencies=[job_delete_weather_file.job_id])
+job_try_to_delete_weather_dir_again = Job(
+    DeleteDirTask('data/weather'),
+    dependencies=[job_delete_weather_dir.job_id])
 
-#Сохраняем в репозитарий
+# Сохраняем в репозитарий
 repository.save([
     job_create_dir,
     job_create_file,
@@ -83,8 +102,12 @@ repository.save([
 scheduler = Scheduler(logger, QueueProcessor(
     logger, JobQueueDispatcher()), repository, pool_size=config.pool_size)
 
-scheduler.schedule(Job(task=EmptyTask('Emptytask says hello!'), max_working_time=-1, tries=5,
-                       start_at=datetime.now() + timedelta(minutes=1)))
+scheduler.schedule(
+    Job(task=EmptyTask('Emptytask says hello!'),
+        max_working_time=-1,
+        tries=5,
+        start_at=datetime.now() + timedelta(minutes=1)))
+
 scheduler.run()
 time.sleep(120)
 scheduler.stop()

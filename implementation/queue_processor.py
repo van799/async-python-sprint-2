@@ -9,7 +9,11 @@ from implementation.job_queue_dispatcher import JobQueueDispatcher
 class QueueProcessor(QueueProcessorBase):
     """Класс отвечает за обработку Jobs"""
 
-    def __init__(self, logger, job_queue_dispatcher: JobQueueDispatcher, pool_size=10):
+    def __init__(self,
+                 logger,
+                 job_queue_dispatcher: JobQueueDispatcher,
+                 pool_size=10):
+
         self.__logger = logger
         self.__pool_size = pool_size
         self.__is_running = False
@@ -20,7 +24,11 @@ class QueueProcessor(QueueProcessorBase):
         return self.__is_running
 
     @staticmethod
-    def __process_queue(logger, event, job_queue_dispatcher, pool_size) -> None:
+    def __process_queue(
+            logger,
+            event,
+            job_queue_dispatcher,
+            pool_size) -> None:
         """Метод для обработки очереди и запуска задач."""
         while True:
             jobs_count = 0
@@ -50,7 +58,8 @@ class QueueProcessor(QueueProcessorBase):
                         'JobQueueProcessor.__process_queue')
                 if job.done:
                     logger.log_info(
-                        f'Job "{job.task_name}", param: "{job.task_param}" done.')
+                        f"Job '{job.task_name}',"
+                        + " param: '{job.task_param}' done.")
 
             if event.is_set():
                 logger.log_debug(
@@ -61,11 +70,17 @@ class QueueProcessor(QueueProcessorBase):
             time.sleep(1)
 
     def add_jobs_to_queue(self, jobs) -> None:
-        """Метод вызывает метод job_queue_dispatcher для добавления jobs в очередь"""
+        """
+        Метод вызывает метод job_queue_dispatcher
+        для добавления jobs в очередь
+        """
         return self.__job_queue_dispatcher.add_jobs_to_queue(jobs)
 
     def add_job_to_queue(self, job) -> None:
-        """Метод вызывает метод job_queue_dispatcher для добавления job в очередь"""
+        """
+        Метод вызывает метод job_queue_dispatcher
+        для добавления job в очередь
+        """
         return self.__job_queue_dispatcher.add_job_to_queue(job)
 
     def get_queue(self) -> None:

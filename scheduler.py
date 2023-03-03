@@ -1,7 +1,9 @@
 class Scheduler:
     """Класс описывающий планировщик задач и его методы."""
 
-    def __init__(self, logger, queue_processor, job_repository=None, pool_size=10):
+    def __init__(self, logger,
+                 queue_processor, job_repository=None,
+                 pool_size=10):
         self.__logger = logger
         self.__pool_size = pool_size
         self.__is_running = False
@@ -9,10 +11,13 @@ class Scheduler:
         self.__queue_processor = queue_processor
 
     def schedule(self, job):
-        """Постановка задач в очередь. Сперва проверяются есть ли запущенные задачи,
-        если есть выполнение задач останавливается. В очередь можно добавить любое
-        количество задач, но за один запуск планировщика будет обработано только
-        то количество задач, которое соответствует pool_size планировщика. """
+        """
+        Постановка задач в очередь. Сперва проверяются есть ли
+        запущенные задачи, если есть выполнение задач останавливается.
+        В очередь можно добавить любое количество задач, но
+        за один запуск планировщика будет обработано только
+        то количество задач, которое соответствует pool_size планировщика.
+        """
         self.__logger.log_info(f'Schedule job: "{job.task_name}".'
                                f' Param: "{job.task_param}"')
         was_running = self.__is_running
@@ -41,7 +46,8 @@ class Scheduler:
 
     def __load_jobs(self):
         if self.__job_repository is None:
-            self.__logger.log_debug('Job repository is empty', 'Scheduler.__load_jobs')
+            self.__logger.log_debug(
+                'Job repository is empty', 'Scheduler.__load_jobs')
             return []
         return self.__job_repository.get()
 
@@ -52,7 +58,10 @@ class Scheduler:
             return
         jobs_to_save = list(
             filter(
-                lambda o: o.done is False or o.done_with_error is True, self.__queue_processor.get_queue())
+                lambda o:
+                o.done is False
+                or o.done_with_error is True,
+                self.__queue_processor.get_queue())
         )
         self.__job_repository.save(jobs_to_save)
 

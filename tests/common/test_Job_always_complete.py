@@ -7,5 +7,5 @@ class TestJobAlwaysComplete(Job):
         super().__init__(task=TestEmptyTask())
 
     @property
-    def done(self): 
+    def done(self):
         return True

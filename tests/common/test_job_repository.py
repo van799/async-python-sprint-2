@@ -12,5 +12,3 @@ class TestJobRepository(RepositoryBase):
 
     def save(self, jobs):
         self.__items.extend(jobs)
-
-

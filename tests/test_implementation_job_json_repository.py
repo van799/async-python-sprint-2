@@ -30,8 +30,10 @@ class TestJobJsonRepository(unittest.TestCase):
         job_json_repository = JobJsonRepository(reader_writer=TestReadWrite(json_jobs),
                                                 task_factory=self.task_factory)
         saved_jobs = job_json_repository.get()
-        saved_job = next(filter(lambda o: o.job_id
-                         == test_job_id, saved_jobs), None)
+        saved_job = next(
+            filter(
+                lambda o: o.job_id == test_job_id,
+                saved_jobs), None)
 
         self.assertIsNotNone(saved_job)
 

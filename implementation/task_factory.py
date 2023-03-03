@@ -1,5 +1,6 @@
 class TaskFactory:
-    """Класс нужен для создания класса такса при считывании не выполненных TASK из файла."""
+    """Класс нужен для создания класса такса при
+    считывании не выполненных TASK из файла."""
 
     def __init__(self, creators={}):
         self.__creators = creators
@@ -7,7 +8,9 @@ class TaskFactory:
     """Метод для предварительной регистрации TASK"""
 
     def register_task(self, task_cls: type):
-        self.__creators[task_cls.__name__] = lambda p: TaskFactory.__get_object(
+        self.__creators[
+            task_cls.__name__
+        ] = lambda p: TaskFactory.__get_object(
             task_cls, p)
 
     @staticmethod

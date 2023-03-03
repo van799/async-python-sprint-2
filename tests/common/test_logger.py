@@ -1,5 +1,3 @@
-import logging
-
 from core.logger_base import LoggerBase
 
 

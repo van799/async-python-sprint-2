@@ -22,4 +22,5 @@ class TestQueueProcessor(QueueProcessorBase):
     def add_job_to_queue(self, jobs):
         self.__job_queue_dispatcher.add_job_to_queue(jobs)
 
-    def get_queue(self): return self.__job_queue_dispatcher.get_all_jobs()
+    def get_queue(self):
+        return self.__job_queue_dispatcher.get_all_jobs()
