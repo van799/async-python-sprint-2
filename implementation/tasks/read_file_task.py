@@ -8,6 +8,6 @@ class ReadFileTask(TaskBase):
         super().__init__(param)
 
     def execute(self) -> None:
-        with open(f'{self.param}.txt', ) as f:
+        with open(f'{self.param}', ) as f:
             lines = f.readlines()
-        print(f'read file: {lines}')
+        print(f'Readed file:\n {lines}')

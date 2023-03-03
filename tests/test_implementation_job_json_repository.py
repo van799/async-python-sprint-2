@@ -124,22 +124,6 @@ class TestJobJsonRepository(unittest.TestCase):
         self.assertEqual(test_job_descriptor.max_working_time,
                          test_max_working_time)
 
-    def test_get_job_descriptor_from_dict_maps_tries(self):
-        test_tries = 2
-        test_dict = {
-            'job_id': '',
-            'task_name': '',
-            'task_param': '',
-            'start_at': '',
-            'max_working_time': '',
-            'tries': test_tries,
-            'dependencies': '',
-        }
-
-        test_job_descriptor = JobJsonRepository.get_job_descriptor_from_dict(
-            test_dict)
-        self.assertEqual(test_job_descriptor.tries, test_tries)
-
     def test_get_job_descriptor_from_dict_maps_dependencies(self):
         test_dependencies = ['test_str1', 'test_str2']
         test_dict = {

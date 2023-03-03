@@ -28,7 +28,6 @@ class JobJsonRepository(RepositoryBase):
                 dict_obj['start_at'])
 
         job_descriptor.max_working_time = dict_obj['max_working_time']
-        job_descriptor.tries = dict_obj['tries']
         job_descriptor.dependencies = dict_obj['dependencies']
 
         return job_descriptor

@@ -1,7 +1,7 @@
 class JobQueueDispatcher:
     """Класс управляет обработкой Job"""
 
-    def __init__(self, queue: []):
+    def __init__(self, queue=[]):
         self.__queue = queue
 
     def get_jobs_to_run(self) -> []:

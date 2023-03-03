@@ -42,31 +42,49 @@ task_factory.register_task(ReadFileTask)
 task_factory.register_task(DeleteFileTask)
 task_factory.register_task(GetWeatherTask)
 
+# Планируем выполнение тасок
 repository = JobJsonRepository(FileReadWrite(config.filename), task_factory)
+job_create_dir = Job(CreateDirTask('data/create_file'))
+job_create_file = Job(CreateFileTask('data/create_file/create_file.txt'),
+                dependencies=[job_create_dir.job_id], tries=5)
+job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'),
+                dependencies=[job_create_file.job_id])
+job_delete_dir = Job(DeleteDirTask('data/create_file'),
+                dependencies=[job_delete_file.job_id])
+job_create_weather_dir = Job(CreateDirTask('data/weather'))
+job_create_weather_file = Job(CreateFileTask('data/weather/weather_forecast.txt'),
+                dependencies=[job_create_weather_dir.job_id])
+job_get_weather = Job(GetWeatherTask('data/weather/weather_forecast.txt'),
+                dependencies=[job_create_weather_file.job_id])
+job_read_weather_from_file = Job(task=ReadFileTask('data/weather/weather_forecast.txt'),
+                dependencies=[job_get_weather.job_id])
+job_delete_weather_file = Job(DeleteFileTask('data/weather/weather_forecast.txt'),
+                dependencies=[job_read_weather_from_file.job_id])
+job_delete_weather_dir = Job(DeleteDirTask('data/weather'),
+                dependencies=[job_delete_weather_file.job_id])
+job_try_to_delete_weather_dir_again = Job(DeleteDirTask('data/weather'),
+                dependencies=[job_delete_weather_dir.job_id])
+
+#Сохраняем в репозитарий
+repository.save([
+    job_create_dir,
+    job_create_file,
+    job_delete_file,
+    job_delete_dir,
+    job_create_weather_dir,
+    job_create_weather_file,
+    job_get_weather,
+    job_read_weather_from_file,
+    job_delete_weather_file,
+    job_delete_weather_dir,
+    job_try_to_delete_weather_dir_again
+])
+
 scheduler = Scheduler(logger, QueueProcessor(
-    logger, JobQueueDispatcher([])), repository, pool_size=config.pool_size)
+    logger, JobQueueDispatcher()), repository, pool_size=config.pool_size)
 
-if not os.path.exists(config.filename) or len(repository.get()) <= 0:
-    #     Добавляем TASK в dependencies
-    job_create_dir = Job(CreateDirTask('data/create_dir'), tries=5)
-    job_create_file = Job(CreateFileTask('data/create_dir/create_file.txt'),
-                          dependencies=[job_create_dir.job_id], tries=5)
-    job_delete_file = Job(DeleteFileTask('data/create_file/create_file.txt'),
-                          dependencies=[job_create_file.job_id], tries=5)
-
-    #     Планировка выполнения TASK
-    scheduler.schedule(job_create_dir)
-    scheduler.schedule(job_create_file)
-    scheduler.schedule(job_delete_file)
-    scheduler.schedule(Job(task=CreateDirTask(
-        'data/create_dir'), max_working_time=-1, tries=0))
-    scheduler.schedule(Job(task=CreateFileTask('data/create_dir/create_file_weather.txt'),
-                           max_working_time=-1, tries=0))
-    scheduler.schedule(Job(task=GetWeatherTask('data/create_dir/create_file_weather.txt'),
-                           max_working_time=-1, tries=0))
-    scheduler.schedule(Job(task=EmptyTask('param'), max_working_time=-1,
-                       tries=0, start_at=datetime.now() + timedelta(minutes=1)))
-
+scheduler.schedule(Job(task=EmptyTask('Emptytask says hello!'), max_working_time=-1, tries=5,
+                       start_at=datetime.now() + timedelta(minutes=1)))
 scheduler.run()
 time.sleep(120)
 scheduler.stop()

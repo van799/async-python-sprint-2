@@ -6,6 +6,7 @@ class EmptyTask(TaskBase):
 
     def __init__(self, param: str):
         super().__init__(param)
+        self.__param = param
 
     def execute(self) -> None:
-        print('Finished test TASK.')
+        print(self.__param)

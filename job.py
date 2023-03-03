@@ -11,7 +11,7 @@ class Job:
                  job_id='',
                  start_at: datetime = None,
                  max_working_time: int = -1,
-                 tries: int = 0,
+                 tries: int = 3,
                  dependencies: [] = [],
                  done: bool = False,
                  done_with_error: bool = False,
@@ -39,8 +39,6 @@ class Job:
             return False
         if self.__start_at is not None and self.__start_at >= time_now:
             return False
-        if self.__tries_count > self.__tries > 0:
-            return False
         return True
 
     def run(self, time_now):
@@ -66,6 +64,7 @@ class Job:
                 else:
                     self.__done_with_error = True
                     self.__error_message = 'Attempts count is excided'
+
             current_time = yield
 
     @property
@@ -87,10 +86,6 @@ class Job:
     @property
     def max_working_time(self) -> int:
         return self.__max_working_time
-
-    @property
-    def tries(self) -> int:
-        return self.__tries
 
     @property
     def dependencies(self):
@@ -128,7 +123,6 @@ class Job:
         job_descriptor.task_param = self.task_param
         job_descriptor.start_at = self.start_at
         job_descriptor.max_working_time = self.max_working_time
-        job_descriptor.tries = self.tries
         job_descriptor.dependencies = self.dependencies
         return job_descriptor
 
@@ -143,5 +137,4 @@ class Job:
             task=task,
             start_at=job_descriptor.start_at,
             max_working_time=job_descriptor.max_working_time,
-            tries=job_descriptor.tries,
             dependencies=job_descriptor.dependencies)
